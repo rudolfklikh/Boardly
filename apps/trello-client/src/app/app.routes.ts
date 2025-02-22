@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, type Routes } from '@angular/router';
+import { type Routes } from '@angular/router';
 import { AUTH_GUARD, HOME_GUARD } from './auth/services/auth.guard.service';
 
-const routes: Routes = [
+export const appRoutes: Routes = [
   {
     path: '',
     children: [
@@ -31,9 +30,3 @@ const routes: Routes = [
     redirectTo: 'boards'
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}

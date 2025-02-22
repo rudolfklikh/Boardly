@@ -3,27 +3,32 @@ import { AuthService } from './auth/services/auth.service';
 import { type CurrentUser } from './auth/interfaces/current-user.interface';
 import { SocketService } from './shared/services/socket.service';
 import { take } from 'rxjs';
+import { TopbarComponent } from './shared/components/topbar/topbar.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { RouterOutlet } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [TopbarComponent, SidebarComponent, RouterOutlet, NgOptimizedImage]
 })
 export class AppComponent implements OnInit {
-  private readonly authService = inject(AuthService);
-  private readonly socketService = inject(SocketService);
+  readonly #authService = inject(AuthService);
+  readonly #socketService = inject(SocketService);
 
   ngOnInit(): void {
-    this.authService
+    this.#authService
       .getCurrentUser()
       .pipe(take(1))
       .subscribe({
-        next: (currentUser: CurrentUser) => {
-          this.authService.setCurrentUser(currentUser);
-          this.socketService.setupSocketConnection(currentUser);
+        next: (currentUser: Readonly<CurrentUser>) => {
+          this.#authService.setCurrentUser(currentUser);
+          this.#socketService.setupSocketConnection(currentUser);
         },
-        error: () => this.authService.setCurrentUser(null)
+        error: () => this.#authService.setCurrentUser(null)
       });
   }
 }
