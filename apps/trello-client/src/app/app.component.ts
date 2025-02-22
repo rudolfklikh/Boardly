@@ -6,14 +6,13 @@ import { take } from 'rxjs';
 import { TopbarComponent } from './shared/components/topbar/topbar.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { RouterOutlet } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [TopbarComponent, SidebarComponent, RouterOutlet, NgOptimizedImage]
+  imports: [TopbarComponent, SidebarComponent, RouterOutlet]
 })
 export class AppComponent implements OnInit {
   readonly #authService = inject(AuthService);
