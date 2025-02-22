@@ -1,0 +1,250 @@
+@use '../../styles/mixins' as mixins;
+
+:host {
+  @include mixins.flex-builder(center, center);
+
+  height: 100%;
+  width: 100%;
+}
+
+.auth {
+  $sectionSize: 990px;
+  $sectionHeight: 550px;
+  $buttonHeight: 50px;
+  $buttonWidth: 150px;
+  $buttonBorderRadius: 6px;
+
+  font-family: 'Rubik', sans-serif;
+  background-color: var(--static-white);
+  box-shadow: var(--shadow-default-1);
+  border-radius: 10px;
+
+  position: relative;
+  overflow: hidden;
+  min-width: $sectionSize;
+  min-height: $sectionHeight;
+  max-width: 100%;
+
+  &.right-panel-active {
+    & .auth__overlay {
+      transform: translateX(-100%);
+    }
+
+    & .overlay {
+      transform: translateX(50%);
+
+      &-left {
+        transform: translateX(0);
+      }
+
+      &-right {
+        transform: translateX(20%);
+      }
+    }
+
+    & .sign-in-container {
+      transform: translateX(100%);
+    }
+
+    & .sign-up-container {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 5;
+      animation: show 0.6s;
+    }
+  }
+
+  &__title {
+    font-family: 'Rubik', sans-serif;
+    font-size: var(--h2-size);
+    margin-bottom: 24px;
+  }
+
+  &__form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 50%;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+    overflow: hidden;
+
+    &__title {
+      font-family: 'Rubik', sans-serif;
+      font-size: var(--h2-size);
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    &__subtitle {
+      font-size: var(--h4-size);
+      line-height: 1.3;
+      margin-bottom: 14px;
+      max-width: 270px;
+    }
+
+    &__panel {
+      @include mixins.flex-builder(center, center, column);
+
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      padding: 0 40px;
+
+      text-align: center;
+      transform: translateX(0);
+      transition: transform 0.6s ease-in-out;
+    }
+
+    & .overlay {
+      height: 100%;
+      width: 200%;
+      background: var(--primary-gradient);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 0 0;
+      position: relative;
+      left: -100%;
+      color: var(--static-white);
+      transform: translateX(0);
+      transition: transform 0.6s ease-in-out;
+
+      & .overlay-left {
+        transform: translateX(0);
+      }
+
+      & .overlay-right {
+        right: 0;
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__errors {
+    color: var(--accent-50);
+  }
+
+  & .form {
+    &__control {
+      @include mixins.flex-builder(flex-start, flex-start, column);
+
+      min-height: 110px;
+      width: 90%;
+    }
+
+    &__label {
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      color: var(--cool-gray-100);
+    }
+
+    &__required {
+      color: var(--accent-50);
+      font-weight: 700;
+      margin-left: 2px;
+    }
+  }
+
+  & .sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+  }
+
+  & .sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  & form {
+    @include mixins.flex-builder(center, center, column);
+
+    gap: 12px;
+
+    height: 100%;
+    padding: 0 50px;
+    background-color: var(--static-white);
+    text-align: center;
+  }
+
+  & input {
+    font-family: 'Rubik', sans-serif;
+    font-size: 16px;
+    width: 90%;
+    padding: 12px 15px;
+    margin: 16px 0 5px 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background-color: var(--cool-gray-10);
+    outline: none;
+
+    &.invalid {
+      border: 1px solid var(--accent-50);
+    }
+  }
+
+  & button {
+    @include mixins.flex-builder(center, center);
+
+    height: $buttonHeight;
+    width: $buttonWidth;
+    color: var(--secondary-background-color);
+    font-size: 16px;
+    margin-top: 24px;
+    background-color: var(--primary-50);
+    border: 1px solid var(--primary-50);
+    border-radius: $buttonBorderRadius;
+    outline: none;
+    transition: var(--transition-time) all ease-in-out;
+    cursor: pointer;
+
+    &.ghost {
+      background-color: transparent;
+      border-color: var(--static-white);
+      margin-top: 14px;
+    }
+
+    &.disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background-color: var(--primary-60);
+    }
+
+    &:active,
+    &:hover {
+      transform: scale(0.95);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+@keyframes show {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}

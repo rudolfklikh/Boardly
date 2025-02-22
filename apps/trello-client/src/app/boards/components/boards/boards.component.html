@@ -1,0 +1,42 @@
+<section class="boards">
+  @if (!isLoading()) { @if (boards()?.length) {
+  <div class="boards__header">
+    <img
+      class="boards__header__image"
+      src="/assets/groups.svg"
+      alt="groups"
+      title="groups"
+    />
+    <div class="boards__header__title">Work Boards</div>
+
+    <div class="boards__search">
+      <img src="/assets/search.svg" alt="search" title="search" />
+      <input type="text" placeholder="Boards search..." />
+    </div>
+  </div>
+  }
+
+  <div
+    class="boards__container"
+    [class.boards__container--empty]="!boards()?.length"
+  >
+    @if (boards()?.length) { @for (board of boards(); track board.id) {
+    <app-board-card [board]="board"></app-board-card>
+    }
+    <div class="boards__container__add-button" (click)="createNewBoard()">
+      <img src="/assets/plus.svg" alt="add" title="add" />
+    </div>
+    } @else {
+    <app-boards-empty (boardCreation)="createBoard($event)"></app-boards-empty>
+    }
+  </div>
+  } @else {
+  <div class="boards__loading">
+    <mat-progress-spinner
+      [mode]="'indeterminate'"
+      [value]="50"
+      class="example-margin"
+    ></mat-progress-spinner>
+  </div>
+  }
+</section>

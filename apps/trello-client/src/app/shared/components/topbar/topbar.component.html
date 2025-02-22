@@ -1,0 +1,14 @@
+<div class="topbar">
+  @if (userInitial()) {
+  <div class="topbar__icons-wrapper">
+    <img
+      class="icon-settings"
+      src="/assets/navigation/settings.svg"
+      alt="settings"
+      title="settings"
+    />
+
+    <div class="icon-profile">{{ userInitial() }}</div>
+  </div>
+  }
+</div>

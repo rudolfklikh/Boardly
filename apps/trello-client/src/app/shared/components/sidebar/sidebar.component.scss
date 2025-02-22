@@ -1,0 +1,62 @@
+@use '../../../../styles/mixins' as mixins;
+
+$sidebarImgSize: 30px;
+
+:host {
+  height: 100%;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-index999);
+
+  animation: leftFadeIn 500ms ease-in-out forwards;
+}
+
+.sidebar {
+  @include mixins.flex-builder(flex-start, center, column);
+
+  height: 100%;
+  width: var(--header-height);
+  padding: var(--container-padding);
+  background-color: #fff;
+  box-shadow: 0 2px 13px var(--shadow-color);
+  gap: 12px;
+
+  & img {
+    height: $sidebarImgSize;
+    width: $sidebarImgSize;
+    transition: var(--transition-time);
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__logout {
+    position: absolute;
+    bottom: var(--container-padding);
+  }
+
+  // position: relative;
+  // width: var(--header-height);
+  // height: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // gap: 20px;
+  // padding: 24px;
+  // transition: all 0.3s;
+}
+
+@keyframes leftFadeIn {
+  0% {
+    left: -40px;
+    opacity: 0;
+  }
+
+  100% {
+    left: 0;
+    opacity: 1;
+  }
+}

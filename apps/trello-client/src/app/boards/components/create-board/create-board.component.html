@@ -1,0 +1,59 @@
+<div class="create-board">
+  <div mat-dialog-title class="create-board__title-wrapper">
+    <h2 class="create-board__title-wrapper__text">Board creation</h2>
+    <img
+      class="create-board__title-wrapper__icon"
+      src="/assets/close.svg"
+      alt="close"
+      title="close"
+      mat-dialog-close
+      (click)="onClose()"
+    />
+  </div>
+
+  <mat-dialog-content>
+    <form [formGroup]="form">
+      <div class="create-board__form">
+        <label class="create-board__form__label" for="title"
+          >Title <span class="create-board__form__required">*</span></label
+        >
+        <input
+          class="create-board__form__input"
+          [class.create-board__form__input--invalid]="isShowErrors"
+          type="text"
+          id="title"
+          formControlName="title"
+          [placeholder]="creationLabels.TITLE"
+        />
+        @if (isShowErrors) {
+        <div class="create-board__errors">
+          @if (title.errors?.['minlength']) { The input field minimum length is
+          3 } @if (title.errors?.['required']) { The input field is required }
+        </div>
+        }
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div class="create-board__buttons-wrapper">
+      <button
+        class="create-board__button"
+        mat-button
+        mat-dialog-close
+        (click)="onClose()"
+      >
+        Cancel
+      </button>
+      <button
+        class="create-board__button"
+        [class.create-board__button--disabled]="!form.valid"
+        [disabled]="!form.valid"
+        mat-dialog-close
+        cdkFocusInitial
+        (click)="onSubmit()"
+      >
+        Confirm
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

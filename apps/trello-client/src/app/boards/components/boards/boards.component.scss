@@ -1,0 +1,104 @@
+@use '../../../../styles/mixins' as mixins;
+
+$boardPadding: 60px;
+
+.boards {
+  @include mixins.flex-builder(flex-start, center, column);
+
+  height: 100%;
+
+  &__header {
+    @include mixins.flex-builder(flex-start, center);
+
+    width: 100%;
+    padding: 24px;
+    gap: 15px;
+    animation: opacityFadeIn 500ms ease-in-out forwards;
+
+    &__title {
+      font-size: var(--title-size);
+      color: var(--cool-gray-80);
+    }
+
+    &__image {
+      width: var(--title-size);
+    }
+  }
+
+  &__search {
+    @include mixins.flex-builder(center, center);
+
+    flex: 1;
+    gap: 5px;
+
+    & img {
+      height: 28px;
+    }
+
+    & input {
+      height: 28px;
+      width: 350px;
+      outline: none;
+      border: none;
+      background-color: var(--main-background-color);
+      font-size: var(--title-size);
+      color: var(--cool-gray-80);
+
+      &::placeholder {
+        font-size: var(--title-size);
+        color: var(--cool-gray-80);
+      }
+    }
+  }
+
+  &__container {
+    @include mixins.flex-builder(flex-start, flex-start);
+
+    flex-wrap: wrap;
+    gap: 30px;
+    animation: opacityFadeIn 500ms ease-in-out forwards;
+
+    width: 100%;
+    padding: 24px;
+    padding-right: 0;
+
+    &--empty {
+      justify-content: center;
+      flex: 1;
+    }
+
+    &__add-button {
+      @include mixins.flex-builder(flex-start, center);
+
+      padding: 24px;
+      height: 200px;
+      width: 250px;
+
+      & img {
+        width: 30%;
+        transition: var(--transition-time);
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  &__loading {
+    @include mixins.flex-builder(center, center);
+
+    height: 100%;
+  }
+}
+
+@keyframes opacityFadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

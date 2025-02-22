@@ -1,0 +1,20 @@
+<div class="sidebar">
+  <img
+    [routerLink]="['/boards']"
+    [routerLinkActive]="['is-active']"
+    class="sidebar__logo"
+    src="assets/navigation/trello.svg"
+    alt="logo"
+    title="logo"
+  />
+
+  @if (user()) {
+  <img
+    (click)="logout()"
+    class="sidebar__logout"
+    src="assets/navigation/logout.svg"
+    alt="logout"
+    title="logout"
+  />
+  }
+</div>

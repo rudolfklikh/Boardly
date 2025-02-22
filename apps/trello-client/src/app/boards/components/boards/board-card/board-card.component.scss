@@ -1,0 +1,86 @@
+@use '../../../../../styles/mixins' as mixins;
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  width: 270px;
+  min-height: 200px;
+  position: relative;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  box-shadow: 0 2px 13px var(--shadow-color);
+  transition: var(--transition-time);
+  animation: opacityFadeIn 1s ease-in-out forwards;
+  cursor: pointer;
+
+  &__icon {
+    height: 20px;
+
+    position: absolute;
+    top: -1px;
+    left: 25px;
+  }
+
+  &__border {
+    width: 5px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    border-radius: 6px;
+    background-color: var(--primary);
+  }
+
+  &__title {
+    @include mixins.flex-builder(center, center);
+    gap: 6px;
+
+    position: relative;
+
+    &__menu {
+      position: absolute;
+      right: 0;
+    }
+
+    &__text {
+      max-width: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 20px;
+    }
+  }
+
+  &__content {
+    @include mixins.flex-builder(flex-end, flex-end, column);
+
+    font-size: 12px;
+    color: var(--cool-gray-60);
+    padding-left: 6px;
+
+    flex: 1;
+    gap: 4px;
+
+    & span {
+      min-width: 200px;
+      text-align: end;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes opacityFadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

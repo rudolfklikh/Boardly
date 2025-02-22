@@ -1,0 +1,9 @@
+$boardPadding: 60px;
+
+.home {
+  &__container {
+    height: 100vh;
+    background-color: var(--main-background-color);
+    padding: $boardPadding;
+  }
+}

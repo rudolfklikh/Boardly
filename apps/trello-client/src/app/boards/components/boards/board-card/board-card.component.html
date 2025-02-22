@@ -1,0 +1,28 @@
+<div class="board" [routerLink]="['/boards', board().id]">
+  <img
+    class="board__icon"
+    src="/assets/bookmark.svg"
+    alt="bookmark"
+    title="bookmark"
+  />
+  <div class="board__border"></div>
+  <div class="board__title">
+    <img
+      class="sidebar__logo"
+      src="/assets/navigation/trello.svg"
+      alt="logo"
+      title="logo"
+    />
+    <h4 class="board__title__text">{{ board().title }}</h4>
+    <img
+      class="board__title__menu"
+      src="/assets/kebab-menu.svg"
+      alt="menu"
+      title="menu"
+    />
+  </div>
+  <div class="board__content">
+    <span>Created at: {{ board().createdAt | date:'medium' }} </span>
+    <span>Updated at: {{ board().updatedAt | date:'medium' }}</span>
+  </div>
+</div>

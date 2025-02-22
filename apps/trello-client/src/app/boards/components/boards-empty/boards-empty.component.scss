@@ -1,0 +1,53 @@
+@use '../../../../styles/mixins' as mixins;
+
+$buttonHeight: 50px;
+$buttonWidth: 200px;
+$buttonBorderRadius: 6px;
+
+:host {
+  @include mixins.flex-builder(center, center);
+
+  height: 100%;
+}
+
+.boards-empty {
+  @include mixins.flex-builder(flex-start, center, column);
+
+  &__image {
+    max-width: 400px;
+  }
+
+  &__text {
+    font-size: var(--h2-size);
+    text-align: center;
+
+    &--subtitle {
+      margin-top: 8px;
+      font-size: var(--h4-size);
+    }
+  }
+
+  &__button {
+    @include mixins.flex-builder(center, center);
+
+    height: $buttonHeight;
+    width: $buttonWidth;
+    color: var(--secondary-background-color);
+    font-size: 16px;
+
+    margin-top: 36px;
+
+    background-color: var(--primary-50);
+    border: 1px solid var(--primary-50);
+    border-radius: $buttonBorderRadius;
+
+    outline: none;
+
+    transition: var(--transition-time) all ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--primary-60);
+    }
+  }
+}

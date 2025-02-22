@@ -1,0 +1,144 @@
+<section class="auth" #auth>
+  <div class="auth__form-container sign-up-container">
+    <form [formGroup]="signUpForm">
+      <h2 class="auth__title">Sign Up</h2>
+
+      <div class="form__control">
+        <label class="form__label" for="emailAuth"
+          >Email<span class="form__required">*</span></label
+        >
+        <input
+          type="email"
+          placeholder="Email"
+          id="emailAuth"
+          formControlName="email"
+          [class.invalid]="showError(signUpEmail)"
+        />
+
+        @if (showError(signUpEmail)) {
+        <div class="auth__errors">
+          @if (signUpEmail.errors?.['required']) { The input field is required }
+        </div>
+        }
+      </div>
+
+      <div class="form__control">
+        <label class="form__label" for="passwordAuth"
+          >Password<span class="form__required">*</span></label
+        >
+        <input
+          type="password"
+          placeholder="Password"
+          id="passwordAuth"
+          formControlName="password"
+          [class.invalid]="showError(signUpPassword)"
+        />
+
+        @if (showError(signUpPassword)) {
+        <div class="auth__errors">
+          @if (signUpPassword.errors?.['required']) { The input field is
+          required }
+        </div>
+        }
+      </div>
+
+      <div class="form__control">
+        <label class="form__label" for="name"
+          >Name<span class="form__required">*</span></label
+        >
+        <input
+          type="text"
+          placeholder="Name"
+          id="name"
+          formControlName="username"
+          [class.invalid]="showError(userName)"
+        />
+
+        @if (showError(userName)) {
+        <div class="auth__errors">
+          @if (userName.errors?.['required']) { The input field is required }
+        </div>
+        }
+      </div>
+
+      <button
+        [class.disabled]="!signUpForm.valid"
+        [disabled]="!signUpForm.valid"
+        (click)="onSubmit(authSubmitActions.SIGN_UP)"
+      >
+        Sign Up
+      </button>
+    </form>
+  </div>
+  <div class="auth__form-container sign-in-container">
+    <form [formGroup]="signInForm">
+      <h2 class="auth__title">Sign in</h2>
+
+      <div class="form__control">
+        <label class="form__label" for="email"
+          >Email<span class="form__required">*</span></label
+        >
+        <input
+          type="email"
+          placeholder="Email"
+          id="email"
+          formControlName="email"
+          [class.invalid]="showError(signInEmail)"
+        />
+
+        @if (showError(signInEmail)) {
+        <div class="auth__errors">
+          @if (signInEmail.errors?.['required']) { The input field is required }
+        </div>
+        }
+      </div>
+      <div class="form__control">
+        <label class="form__label" for="password"
+          >Password<span class="form__required">*</span></label
+        >
+        <input
+          type="password"
+          placeholder="Password"
+          id="password"
+          formControlName="password"
+          [class.invalid]="showError(signInPassword)"
+        />
+
+        @if (showError(signInPassword)) {
+        <div class="auth__errors">
+          @if (signInPassword.errors?.['required']) { The input field is
+          required }
+        </div>
+        }
+      </div>
+
+      <span class="auth__errors">{{ errorMessage }}</span>
+
+      <button
+        [class.disabled]="!signInForm.valid"
+        [disabled]="!signInForm.valid"
+        (click)="onSubmit(authSubmitActions.SIGN_IN)"
+      >
+        Sign In
+      </button>
+    </form>
+  </div>
+  <div class="auth__overlay">
+    <div class="overlay">
+      <div class="auth__overlay__panel overlay-left">
+        <h2 class="auth__overlay__title">Welcome Back!</h2>
+        <p class="auth__overlay__subtitle">
+          To keep connected with us please login with your personal info
+        </p>
+        <button class="ghost" (click)="togglePanel()">Sign In</button>
+      </div>
+      <div class="auth__overlay__panel overlay-right">
+        <h2 class="auth__overlay__title">Hello, Friend!</h2>
+        <p class="auth__overlay__subtitle">
+          Enter your personal details and start journey with us
+        </p>
+        <button class="ghost" (click)="togglePanel()">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</section>

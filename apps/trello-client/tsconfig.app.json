@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": []
+  },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts", ".storybook/**/*"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "vite.config.mts",
+    "**/*.stories.ts",
+    "src/test-setup.ts"
+  ]
+}

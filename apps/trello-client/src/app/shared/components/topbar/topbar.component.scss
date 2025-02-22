@@ -1,0 +1,69 @@
+@use '../../../../styles/mixins' as mixins;
+
+:host {
+  width: 100%;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-index998);
+  animation: topFadeIn 500ms ease-in-out forwards; // @TODO check why twice
+}
+
+.topbar {
+  @include mixins.flex-builder(flex-end, center);
+  height: var(--header-height);
+
+  padding: var(--container-padding);
+  padding-right: 24px;
+  background-color: var(--secondary-background-color);
+  box-shadow: 0 2px 13px var(--shadow-color);
+
+  &__icons-wrapper {
+    @include mixins.flex-builder(center, center);
+
+    & .icon-settings {
+      width: 25px;
+    }
+
+    & .icon-profile {
+      @include mixins.flex-builder(center, center);
+
+      height: 30px;
+      width: 30px;
+      color: var(--secondary-background-color);
+      background: var(--primary);
+      border-radius: 50%;
+      margin-left: 15px;
+      transition: var(--transition-time);
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    & img {
+      width: 30px;
+      margin-left: 15px;
+      transition: var(--transition-time);
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@keyframes topFadeIn {
+  0% {
+    top: -40px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}

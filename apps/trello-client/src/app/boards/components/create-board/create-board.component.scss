@@ -1,0 +1,105 @@
+@use '../../../../styles/mixins' as mixins;
+
+$buttonHeight: 50px;
+$buttonWidth: 100px;
+$buttonBorderRadius: 6px;
+
+.create-board {
+  padding: 12px;
+
+  &__title-wrapper {
+    @include mixins.flex-builder(space-between, center);
+
+    &__text {
+      font-family: 'Rubik', sans-serif;
+      font-size: var(--h2-size);
+    }
+
+    &__icon {
+      transition: var(--transition-time);
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  & mat-dialog-content {
+    @include mixins.flex-builder(center, center);
+  }
+
+  &__form {
+    @include mixins.flex-builder(flex-start, flex-start, column);
+
+    margin-top: 15px;
+    min-height: 120px;
+
+    &__label {
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      color: var(--cool-gray-100);
+    }
+
+    &__required {
+      color: var(--accent-50);
+      font-weight: 700;
+    }
+
+    &__input {
+      height: 55px;
+      width: 450px;
+      margin-top: 7px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      box-shadow: 0 2px 13px var(--shadow-color);
+      padding: 0 60px 0 20px;
+      outline: none;
+
+      &--invalid {
+        border: 1px solid var(--accent-50);
+      }
+    }
+  }
+
+  &__errors {
+    color: var(--accent-50);
+    margin-top: 5px;
+  }
+
+  &__buttons-wrapper {
+    @include mixins.flex-builder(flex-end, center);
+
+    padding-right: 24px;
+
+    width: 100%;
+    gap: 15px;
+  }
+
+  &__button {
+    @include mixins.flex-builder(center, center);
+
+    height: $buttonHeight;
+    width: $buttonWidth;
+    color: var(--secondary-background-color);
+    font-size: 16px;
+    margin-top: 36px;
+    background-color: var(--primary-50);
+    border: 1px solid var(--primary-50);
+    border-radius: $buttonBorderRadius;
+    outline: none;
+    transition: var(--transition-time) all ease-in-out;
+    cursor: pointer;
+
+    &--disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background-color: var(--primary-60);
+    }
+  }
+}
