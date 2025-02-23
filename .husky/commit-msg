@@ -1,1 +1,5 @@
-npx --no -- commitlint -e ${1}
+commitMsg="$(cat $1)"
+releaseMsgPattern="^release: v[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$"
+if ! [[ $commitMsg =~ $releaseMsgPattern ]] ; then
+  npx --no -- commitlint -e ${1}
+fi

@@ -4,3 +4,6 @@
 /.nx/cache
 /.nx/workspace-data
 .angular
+.github
+CHANGELOG.md
+pnpm-lock.yaml
