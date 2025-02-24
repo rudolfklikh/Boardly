@@ -1,26 +1,25 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import type { CoreState } from '../interfaces/core.store.interface';
+import { patchState, signalStore, withHooks, withState } from '@ngrx/signals';
 import { inject } from '@angular/core';
-import { AuthService } from '../../auth/services/auth.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
-import { SocketService } from '../services/socket.service';
-import type { CurrentUser } from '../../auth/interfaces/current-user.interface';
+import type { CoreState } from '../shared/interfaces/core.store.interface';
+import type { CurrentUser } from '../auth/interfaces/current-user.interface';
+import { AuthService } from '../auth/services/auth.service';
+import { SocketService } from '../shared/services/socket.service';
 
 const initialState: CoreState = {
   currentUser: null
 };
 
 export const CoreStore = signalStore(
+  { providedIn: 'root' },
   withState(initialState),
-  withMethods(
-    (
-      store,
-      authService = inject(AuthService),
-      socketService = inject(SocketService)
-    ) => ({
-      loadCurrentUser: rxMethod<void>(
+  withHooks({
+    onInit: (store) => {
+      const authService = inject(AuthService);
+      const socketService = inject(SocketService);
+      rxMethod<void>(
         pipe(
           switchMap(() =>
             authService.getCurrentUser().pipe(
@@ -38,7 +37,7 @@ export const CoreStore = signalStore(
             )
           )
         )
-      )
-    })
-  )
+      )();
+    }
+  })
 );

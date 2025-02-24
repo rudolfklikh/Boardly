@@ -1,11 +1,9 @@
 import { type Routes } from '@angular/router';
 import { AUTH_GUARD, HOME_GUARD } from './auth/services/auth.guard.service';
-import { CoreStore } from './shared/store/core.store';
 
 export const appRoutes: Routes = [
   {
     path: '',
-    providers: [CoreStore],
     children: [
       {
         path: 'auth',

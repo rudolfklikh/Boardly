@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { type CanActivateFn, Router } from '@angular/router';
-import { CoreStore } from '../../shared/store/core.store';
+import { CoreStore } from '../../core/core.store';
 
 export const HOME_GUARD: CanActivateFn = () => {
   const { currentUser } = inject(CoreStore);

@@ -14,6 +14,8 @@ import {
 import { AuthInterceptor } from './auth/services/auth.interceptor.service';
 import { SocketService } from './shared/services/socket.service';
 import player from 'lottie-web';
+import { CoreStore } from './core/core.store';
+import { AuthService } from './auth/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +31,9 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true
     },
+    CoreStore,
+    // TODO remove when all modules are refactored
+    AuthService,
     SocketService
   ]
 };

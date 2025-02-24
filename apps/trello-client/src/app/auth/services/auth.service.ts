@@ -8,9 +8,7 @@ import { type RegisterRequest } from '../interfaces/register-request.interface';
 import { type LoginRequest } from '../interfaces/login-request.interface';
 import { SocketService } from '../../shared/services/socket.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   readonly #http = inject(HttpClient);
   readonly #socketService = inject(SocketService);
