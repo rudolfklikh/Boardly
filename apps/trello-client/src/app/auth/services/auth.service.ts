@@ -12,48 +12,51 @@ import { SocketService } from '../../shared/services/socket.service';
   providedIn: 'root'
 })
 export class AuthService {
+  readonly #http = inject(HttpClient);
   readonly #socketService = inject(SocketService);
-  private _currentUser$ = new BehaviorSubject<CurrentUser | NullOrUndefined>(
+  readonly #currentUser$ = new BehaviorSubject<CurrentUser | NullOrUndefined>(
     undefined
   );
 
-  currentUser$ = this._currentUser$.asObservable();
-  isLoggedIn$: Observable<boolean> = this._currentUser$.pipe(
+  /* TODO#1 - remove this vars and move logic to Core Store when all modules are refactored */
+  currentUser$ = this.#currentUser$.asObservable();
+  isLoggedIn$: Observable<boolean> = this.#currentUser$.pipe(
     filter((currentUser) => currentUser !== undefined),
     map((currentUser) => !!currentUser)
   );
 
-  constructor(private http: HttpClient) {}
-
   getCurrentUser(): Observable<CurrentUser> {
-    return this.http.get<CurrentUser>(`${environment.apiUrl}/user`);
+    return this.#http.get<CurrentUser>(`${environment.apiUrl}/user`);
   }
 
-  register(registerRequest: RegisterRequest): Observable<CurrentUser> {
-    return this.http.post<CurrentUser>(
+  register(
+    registerRequest: Readonly<RegisterRequest>
+  ): Observable<CurrentUser> {
+    return this.#http.post<CurrentUser>(
       `${environment.apiUrl}/users`,
       registerRequest
     );
   }
 
-  login(loginRequest: LoginRequest): Observable<CurrentUser> {
-    return this.http.post<CurrentUser>(
+  login(loginRequest: Readonly<LoginRequest>): Observable<CurrentUser> {
+    return this.#http.post<CurrentUser>(
       `${environment.apiUrl}/users/login`,
       loginRequest
     );
   }
 
-  setToken(currentUser: CurrentUser): void {
+  setToken(currentUser: Readonly<CurrentUser>): void {
     localStorage.setItem('token', currentUser.token);
   }
 
-  setCurrentUser(currentUser: CurrentUser | null): void {
-    this._currentUser$.next(currentUser);
+  /* The same as TODO#1 */
+  setCurrentUser(currentUser: Readonly<CurrentUser> | null): void {
+    this.#currentUser$.next(currentUser);
   }
 
   logout(): void {
     localStorage.removeItem('token');
-    this._currentUser$.next(null);
+    this.#currentUser$.next(null);
     this.#socketService.disconnect();
   }
 }

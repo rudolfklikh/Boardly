@@ -8,7 +8,7 @@ import type { CurrentUser } from '../../auth/interfaces/current-user.interface';
 export class SocketService {
   #socket: Socket | undefined;
 
-  setupSocketConnection(currentUser: CurrentUser): void {
+  setupSocketConnection(currentUser: Readonly<CurrentUser>): void {
     this.#socket = io(`${environment.socketUrl}`, {
       auth: {
         token: currentUser.token
