@@ -1,6 +1,6 @@
 import {
   type ApplicationConfig,
-  provideZoneChangeDetection
+  provideExperimentalZonelessChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
@@ -17,20 +17,18 @@ import player from 'lottie-web';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideExperimentalZonelessChangeDetection(),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
     provideLottieOptions({
       player: () => player
     }),
-
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     },
-
     SocketService
   ]
 };
