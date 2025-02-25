@@ -1,36 +1,26 @@
 import { inject } from '@angular/core';
 import { type CanActivateFn, Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { map } from 'rxjs';
+import { CoreStore } from '../../core/core.store';
 
 export const HOME_GUARD: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router: Router = inject(Router);
+  const { currentUser } = inject(CoreStore);
+  const router = inject(Router);
 
-  return authService.isLoggedIn$.pipe(
-    map((isLoggedIn) => {
-      if (isLoggedIn) {
-        return true;
-      }
+  if (!currentUser()) {
+    router.navigate(['/auth']);
+    return false;
+  }
 
-      router.navigate(['/auth']);
-      return false;
-    })
-  );
+  return true;
 };
 
 export const AUTH_GUARD: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router: Router = inject(Router);
+  const router = inject(Router);
+  const { currentUser } = inject(CoreStore);
 
-  return authService.isLoggedIn$.pipe(
-    map((isLoggedIn) => {
-      if (!isLoggedIn) {
-        return true;
-      }
-
-      router.navigate(['/boards']);
-      return false;
-    })
-  );
+  if (currentUser()) {
+    router.navigate(['/boards']);
+    return false;
+  }
+  return true;
 };

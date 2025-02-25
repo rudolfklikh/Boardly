@@ -7,7 +7,8 @@ export const angularESLintTemplate = tseslint.config({
   files: ['**/*.html'],
   extends: [...angular.configs.templateAll],
   rules: {
-    '@angular-eslint/template/i18n': 'off'
+    '@angular-eslint/template/i18n': 'off',
+    '@angular-eslint/template/prefer-ngsrc': 'warn'
   }
 });
 
