@@ -8,7 +8,7 @@
     title="logo"
   />
 
-  @if (user()) {
+  @if (currentUserS()) {
   <img
     (click)="logout()"
     class="sidebar__logout"
