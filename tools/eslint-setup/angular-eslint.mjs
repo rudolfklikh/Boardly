@@ -1,12 +1,18 @@
-import tseslint from 'typescript-eslint';
 import typescriptParser from '@typescript-eslint/parser';
-import globals from 'globals';
 import angular from 'angular-eslint';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export const angularESLintTemplate = tseslint.config({
   files: ['**/*.html'],
   extends: [...angular.configs.templateAll],
   rules: {
+    '@angular-eslint/template/no-call-expression': [
+      'warn',
+      {
+        allowSuffix: 'S'
+      }
+    ],
     '@angular-eslint/template/i18n': 'off',
     '@angular-eslint/template/prefer-ngsrc': 'warn'
   }
@@ -34,7 +40,11 @@ export const angularESLint = tseslint.config({
         enforcement: 'None',
         ignoreInferredTypes: true,
         parameters: {
-          enforcement: 'ReadonlyDeep'
+          enforcement: 'ReadonlyShallow'
+        },
+        variables: {
+          enforcement: 'ReadonlyShallow',
+          ignoreNamePattern: ['S$', '[r|R]outes$', '^#']
         },
         ignoreNamePattern: ['_', '#']
       }
@@ -92,7 +102,12 @@ export const angularESLint = tseslint.config({
     '@typescript-eslint/no-require-imports': 'warn',
     '@typescript-eslint/no-unused-expressions': 'error',
     '@typescript-eslint/no-empty-object-type': 'warn',
-    'functional/no-mixed-types': 'error',
+    'functional/no-mixed-types': [
+      'error',
+      {
+        checkInterfaces: false
+      }
+    ],
     'functional/no-loop-statements': 'error',
     'no-param-reassign': 'error',
     'prefer-const': 'error',
