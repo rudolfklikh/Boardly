@@ -7,8 +7,7 @@ export const appRoutes: Routes = [
     children: [
       {
         path: 'auth',
-        loadChildren: () =>
-          import('./auth/auth.module').then((m) => m.AuthModule),
+        loadChildren: () => import('./auth/auth.routes'),
         canActivate: [AUTH_GUARD]
       },
       {
