@@ -1,9 +1,7 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
-import { AuthService } from '../../../auth/services/auth.service';
+import { CoreStore } from '../../../core/core.store';
 
 @Component({
   selector: 'el-topbar',
@@ -13,11 +11,8 @@ import { AuthService } from '../../../auth/services/auth.service';
   styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent {
-  readonly #authService = inject(AuthService);
-
-  protected userInitial = toSignal(
-    this.#authService.currentUser$.pipe(
-      map((currentUser) => currentUser?.username.slice(0, 1).toUpperCase())
-    )
+  readonly #coreStore = inject(CoreStore);
+  readonly userInitialS = computed(() =>
+    this.#coreStore.currentUser()?.username.slice(0, 1).toUpperCase()
   );
 }
