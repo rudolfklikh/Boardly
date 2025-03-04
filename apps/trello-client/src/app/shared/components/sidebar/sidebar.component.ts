@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../../auth/services/auth.service';
+import { CoreStore } from '../../../core/core.store';
 
 @Component({
   selector: 'el-sidebar',
@@ -11,13 +10,12 @@ import { AuthService } from '../../../auth/services/auth.service';
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-
-  protected user = toSignal(this.authService.currentUser$);
+  readonly #coreStore = inject(CoreStore);
+  readonly #router = inject(Router);
+  readonly currentUserS = this.#coreStore.currentUser;
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/auth']);
+    this.#coreStore.logout();
+    this.#router.navigate(['/auth']);
   }
 }
