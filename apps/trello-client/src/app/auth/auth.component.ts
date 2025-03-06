@@ -1,64 +1,75 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
-import { Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from './services/auth.service';
+import {
+  Component,
+  ElementRef,
+  computed,
+  inject,
+  signal,
+  viewChild,
+  type WritableSignal
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+import { CoreStore } from '../core/core.store';
 import { EAuthSubmitAction } from './auth.model';
-import { type CurrentUser } from './interfaces/current-user.interface';
-import { type LoginRequest } from './interfaces/login-request.interface';
+import type { LoginRequest } from './interfaces/login-request.interface';
 import { type RegisterRequest } from './interfaces/register-request.interface';
-import { SocketService } from '../shared/services/socket.service';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  standalone: false
+  imports: [ReactiveFormsModule],
+  standalone: true
 })
 export class AuthComponent {
   readonly #fb = inject(FormBuilder);
-  readonly #authService = inject(AuthService);
-  readonly #router = inject(Router);
-  readonly #socketService = inject(SocketService);
+  readonly #coreStore = inject(CoreStore);
 
-  authContainer = viewChild.required<ElementRef<HTMLDivElement>>('auth');
-  authSubmitActions = EAuthSubmitAction;
-  errorMessage: string | null = null;
+  readonly authContainer =
+    viewChild.required<ElementRef<HTMLDivElement>>('auth');
+  readonly authSubmitActions = EAuthSubmitAction;
+  readonly errorMessageS: WritableSignal<string | null> = signal(null);
 
-  signInForm = this.#fb.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required]
+  readonly signInFormS = signal(
+    this.#fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required]
+    })
+  );
+
+  readonly signUpFormS = signal(
+    this.#fb.group({
+      email: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    })
+  );
+
+  readonly authFormControlsS = computed(() => {
+    const { email: sigInEmail, password: signInPassword } =
+      this.signInFormS().controls;
+    const {
+      email: signUpEmail,
+      password: signUpPassword,
+      username: signUpUsername
+    } = this.signUpFormS().controls;
+    return {
+      sigInEmail,
+      signInPassword,
+      signUpEmail,
+      signUpPassword,
+      signUpUsername
+    };
   });
-
-  signUpForm = this.#fb.group({
-    email: ['', Validators.required],
-    username: ['', Validators.required],
-    password: ['', Validators.required]
-  });
-
-  get userName(): FormControl {
-    return this.signUpForm.controls.username;
-  }
-
-  get signUpEmail(): FormControl {
-    return this.signUpForm.controls.email;
-  }
-
-  get signUpPassword(): FormControl {
-    return this.signUpForm.controls.password;
-  }
-
-  get signInEmail(): FormControl {
-    return this.signInForm.controls.email;
-  }
-
-  get signInPassword(): FormControl {
-    return this.signInForm.controls.password;
-  }
 
   togglePanel(): void {
     this.authContainer().nativeElement.classList.toggle('right-panel-active');
-    this.clearForm();
+    this.clearForms();
   }
 
   onSubmit(submitAction: EAuthSubmitAction): void {
@@ -76,54 +87,44 @@ export class AuthComponent {
   }
 
   private loginUser(): void {
-    if (!this.signInForm.valid) {
+    const { value, valid } = this.signInFormS();
+    if (!valid) {
       return;
     }
 
-    this.#authService.login(this.signInForm.value as LoginRequest).subscribe({
-      next: (user: CurrentUser) => {
-        this.setupUser(user);
-        this.#router.navigate(['/']);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.errorMessage =
-          (err.error as Record<string, string>)['emailOrPassword'] ?? null;
-      }
+    const setError = (err: HttpErrorResponse) => {
+      this.errorMessageS.set(err.error['emailOrPassword'] ?? null);
+    };
+
+    this.#coreStore.loginIn({
+      payload: value as LoginRequest,
+      errorCallback: setError
     });
   }
 
   private registerUser(): void {
-    if (!this.signUpForm.valid) {
+    const { valid, value } = this.signUpFormS();
+    if (!valid) {
       return;
     }
 
-    this.#authService
-      .register(this.signUpForm.value as RegisterRequest)
-      .subscribe({
-        next: (user: CurrentUser) => {
-          this.setupUser(user);
-          this.#router.navigate(['/']);
-        },
-        error: (err: HttpErrorResponse) => {
-          this.errorMessage = (err.error as string[]).join(', ');
-        }
-      });
+    const setError = (err: HttpErrorResponse) => {
+      this.errorMessageS.set((err.error as string[]).join(', '));
+    };
+
+    this.#coreStore.registerUser({
+      payload: value as RegisterRequest,
+      errorCallback: setError
+    });
   }
 
-  private setupUser(user: CurrentUser): void {
-    this.#authService.setToken(user);
-    this.#authService.setCurrentUser(user);
-    this.#socketService.setupSocketConnection(user);
-    this.errorMessage = null;
-  }
+  private clearForms(): void {
+    this.signUpFormS().markAsUntouched();
+    this.signUpFormS().reset();
 
-  private clearForm(): void {
-    this.signUpForm.markAsUntouched();
-    this.signUpForm.reset();
+    this.signInFormS().markAsUntouched();
+    this.signInFormS().reset();
 
-    this.signInForm.markAsUntouched();
-    this.signInForm.reset();
-
-    this.errorMessage = null;
+    this.errorMessageS.set(null);
   }
 }
