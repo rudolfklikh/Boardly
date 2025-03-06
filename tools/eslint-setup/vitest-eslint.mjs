@@ -48,7 +48,7 @@ export const vitestESLint = tseslint.config({
     'vitest/prefer-called-with': 'error',
     'vitest/prefer-to-be-falsy': 'error',
     'vitest/prefer-to-be-object': 'error',
-    'vitest/prefer-to-be-truthy': 'error',
+    'vitest/prefer-to-be-truthy': 'off',
     'vitest/prefer-to-have-length': 'error',
     'vitest/prefer-equality-matcher': 'error',
     'vitest/prefer-strict-equal': 'error',
