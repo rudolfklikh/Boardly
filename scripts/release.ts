@@ -14,13 +14,11 @@ release({
     console.log(colors.cyan('\nGenerating changelog...'));
     const changelogArgs = [
       'conventional-changelog',
-      '-p',
-      'angular',
       '-i',
       'CHANGELOG.md',
-      '-s'
-      // '--commit-path',
-      // '.'
+      '-s',
+      '--commit-path',
+      '.'
     ];
     await run('npx', changelogArgs, { cwd: '.' });
   }
