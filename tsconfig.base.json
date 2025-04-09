@@ -27,7 +27,8 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "@boardly/*": ["apps/boardly-client/src/*"]
+      "@boardly/*": ["apps/boardly-client/src/*"],
+      "@boardly/mock-signal-store": ["libs/mock-signal-store/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

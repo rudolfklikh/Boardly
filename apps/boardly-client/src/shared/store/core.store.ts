@@ -113,3 +113,5 @@ export const CoreStore = signalStore(
     }
   })
 );
+
+export type CoreStore = InstanceType<typeof CoreStore>;

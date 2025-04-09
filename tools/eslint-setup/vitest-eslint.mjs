@@ -80,6 +80,7 @@ export const vitestESLint = tseslint.config({
     'vitest/valid-expect': 'error',
     'vitest/valid-describe-callback': 'error',
     'vitest/require-local-test-context-for-concurrent-snapshots': 'error',
-    'vitest/no-import-node-test': 'error'
+    'vitest/no-import-node-test': 'error',
+    'functional/prefer-immutable-types': 'off'
   }
 });

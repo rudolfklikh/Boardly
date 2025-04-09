@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator/vitest';
 import { BoardComponent } from './board.component';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 
 describe('BoardComponent', () => {
   let spectator: Spectator<BoardComponent>;
