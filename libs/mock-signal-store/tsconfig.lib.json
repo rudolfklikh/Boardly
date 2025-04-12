@@ -5,7 +5,8 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "composite": true,
+    "sourceMap": true
   },
   "exclude": ["src/**/*.spec.ts", "vite.config.mts", "src/test-setup.ts"],
   "include": ["src/**/*.ts"]

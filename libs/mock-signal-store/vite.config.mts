@@ -16,12 +16,12 @@ export default defineConfig(({ mode }) => ({
     watch: false,
     globals: true,
     environment: 'jsdom',
-    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['src/**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/libs/mock-signal-store',
-      provider: 'istanbul' as const
+      provider: 'v8' as const
     },
     server: {
       deps: {

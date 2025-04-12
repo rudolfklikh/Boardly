@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "types": []
+    "outDir": "../../dist/out-tsc"
   },
   "files": ["src/main.ts"],
-  "include": ["src/**/*.d.ts", ".storybook/**/*"],
+  "include": ["**/*.ts", "**/*.d.ts", ".storybook/**/*"],
   "exclude": [
     "src/**/*.spec.ts",
     "vite.config.mts",

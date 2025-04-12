@@ -32,14 +32,6 @@ export default defineConfig(({ mode }) => ({
     tsconfigPaths(),
     nxCopyAssetsPlugin(['*.md'])
   ],
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       api: 'modern-compiler',
-  //       importer: new NodePackageImporter('./src/styles')
-  //     }
-  //   }
-  // },
   test: {
     coverage: {
       reportsDirectory: '../../coverage/apps/boardly-client',
@@ -49,7 +41,7 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
-    include: ['**/*.spec.ts'],
+    include: ['src/**/*.spec.ts'],
     reporters: ['default'],
     server: {
       deps: {
