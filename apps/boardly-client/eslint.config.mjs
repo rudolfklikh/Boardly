@@ -1,12 +1,13 @@
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import tseslint from 'typescript-eslint';
-import baseConfig from '../../eslint.config.mjs';
+import baseConfig from '../../eslint.base.config.mjs';
 import { FDS_BOUNDARIES_RULES } from '../../tools/utils/fds-design-boundaries.mjs';
 
 export default tseslint.config(
   ...baseConfig,
   {
     files: ['**/*.ts'],
+    ignores: ['**/*.spec.ts'],
     settings: {
       'import-x/resolver-next': [createTypeScriptImportResolver()]
     },

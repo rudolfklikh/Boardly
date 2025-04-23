@@ -7,12 +7,7 @@ export const angularESLintTemplate = tseslint.config({
   files: ['**/*.html'],
   extends: [...angular.configs.templateAll],
   rules: {
-    '@angular-eslint/template/no-call-expression': [
-      'warn',
-      {
-        allowSuffix: 'S'
-      }
-    ],
+    '@angular-eslint/template/no-call-expression': ['warn'],
     '@angular-eslint/template/i18n': 'off',
     '@angular-eslint/template/prefer-ngsrc': 'warn'
   }
@@ -124,7 +119,15 @@ export const angularESLint = tseslint.config({
     'no-underscore-dangle': 'off',
     'no-extra-semi': 'off',
     '@nx/workspace-no-reactive-select-signal': 'error',
-    '@nx/workspace-forbid-on-destroy': 'error'
+    '@nx/workspace-forbid-on-destroy': 'error',
+    '@nx/workspace-check-signal-usage': [
+      'error',
+      { ignoreNzComponentParams: true }
+    ],
+    '@nx/workspace-check-signal-usage-template': 'error',
+    '@nx/workspace-no-signal-funcs-in-template': 'error',
+    '@nx/workspace-no-invalid-signal-initialization': 'error',
+    '@nx/workspace-no-signals-in-getters': 'error'
   }
 });
 
