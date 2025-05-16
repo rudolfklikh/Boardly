@@ -1,7 +1,7 @@
 /// <reference types='vitest' />
 import angular from '@analogjs/vite-plugin-angular';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
       liveReload: true,
       jit: false
     }),
-    tsconfigPaths(),
+    nxViteTsPaths(),
     nxCopyAssetsPlugin(['*.md'])
   ],
   test: {

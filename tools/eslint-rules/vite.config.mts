@@ -1,5 +1,5 @@
 /// <reference types='vitest' />
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 import { defineConfig } from 'vite';
 
@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     mainFields: ['module']
   },
-  plugins: [tsconfigPaths()],
+  plugins: [nxViteTsPaths()],
   test: {
     coverage: {
       reportsDirectory: '../../coverage/tools/eslint-rules',
