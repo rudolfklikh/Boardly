@@ -1,9 +1,9 @@
 /// <reference types='vitest' />
 import angular from '@analogjs/vite-plugin-angular';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
-import tsConfigPaths from 'vite-tsconfig-paths';
 
 import { defineConfig, type ConfigEnv } from 'vite';
+import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default (config: Readonly<ConfigEnv>, projectRoot: string) =>
   defineConfig(({ mode }) => {

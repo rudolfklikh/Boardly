@@ -5,6 +5,7 @@
     "baseUrl": ".",
     "target": "ESNext",
     "module": "ESNext",
+    "moduleDetection": "force",
     "moduleResolution": "bundler",
     "lib": ["ESNext", "dom"],
     "experimentalDecorators": true,
