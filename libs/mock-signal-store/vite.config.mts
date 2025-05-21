@@ -1,35 +1,14 @@
 /// <reference types='vitest' />
-import angular from '@analogjs/vite-plugin-angular';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { defineConfig } from 'vite';
+import { defineConfig, mergeConfig } from 'vite';
+import vitestBase from '../../vite.base';
 
-export default defineConfig(({ mode }) => ({
-  root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/mock-signal-store',
-  plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-  test: {
-    watch: false,
-    globals: true,
-    environment: 'jsdom',
-    include: ['src/**/*.spec.ts'],
-    setupFiles: ['src/test-setup.ts'],
-    reporters: ['default'],
-    coverage: {
-      reportsDirectory: '../../coverage/libs/mock-signal-store',
-      provider: 'v8' as const
-    },
-    server: {
-      deps: {
-        inline: ['@ngneat/spectator']
+export default defineConfig((configEnv) =>
+  mergeConfig(
+    vitestBase(configEnv, __dirname),
+    defineConfig({
+      test: {
+        setupFiles: ['src/test-setup.ts']
       }
-    }
-  },
-  define: {
-    'import.meta.vitest': mode !== 'production'
-  }
-}));
+    })
+  )
+);
