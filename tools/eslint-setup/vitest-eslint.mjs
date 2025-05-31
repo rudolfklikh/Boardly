@@ -14,10 +14,6 @@ export const vitestESLint = tseslint.config({
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-function': 'off',
-    '@nx/enforce-module-boundaries': [
-      'error',
-      { enforceBuildableLibDependency: false }
-    ],
     'vitest/prefer-lowercase-title': 'error',
     'vitest/max-nested-describe': 'error',
     'vitest/no-focused-tests': 'error',

@@ -8,7 +8,7 @@
     "build": "nx run-many --target build --all --parallel=1 --skip-nx-cache",
     "lint": "nx run-many --target lint --all --parallel=1 --skip-nx-cache --exclude=eslint-custom-rules",
     "prettier": "prettier -c -w --log-level=warn . && git diff --exit-code",
-    "start:client": "nx serve trello-client",
+    "start:client": "nx serve boardly-client",
     "release": "tsx scripts/release.ts",
     "prepare": "npx husky || true"
   },
