@@ -77,9 +77,8 @@ jobs:
       - name: Install deps
         run: pnpm install
 
-      # TODO - uncomment when refactored
-      # - name: Test
-      #   run: pnpm run test
+      - name: Test
+        run: pnpm run test
 
       - name: Build
         run: pnpm run build

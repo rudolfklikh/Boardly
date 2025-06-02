@@ -28,7 +28,10 @@ export default (config: Readonly<ConfigEnv>, projectRoot: string) =>
       ],
       test: {
         reporters: ['default'],
+        exclude: ['**/mocks'],
         coverage: {
+          all: false,
+          exclude: ['**/mocks'],
           reportsDirectory: `${__dirname}/coverage/${baseDir}`,
           provider: 'v8',
           reporter: ['html', 'text', 'json'],

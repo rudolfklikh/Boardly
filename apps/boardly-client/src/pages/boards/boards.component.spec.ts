@@ -1,21 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 
+import { provideMockSignalStore } from '@boardly/mock-signal-store';
+import {
+  createComponentFactory,
+  type Spectator
+} from '@ngneat/spectator/vitest';
+import { MockComponent, MockProvider } from 'ng-mocks';
+import { of } from 'rxjs';
+import { BoardsService } from '../../entities/board/api/boards.service';
+import { BoardsStore } from '../../entities/board/store/boards.store';
+import { BoardsEmptyComponent } from '../../entities/board/ui/boards-empty/boards-empty.component';
 import { BoardsComponent } from './boards.component';
 
-describe('BoardsComponent', () => {
-  let component: BoardsComponent;
+describe('boardsComponent', () => {
+  let spectator: Spectator<BoardsComponent>;
   let fixture: ComponentFixture<BoardsComponent>;
 
+  const createComponent = createComponentFactory({
+    component: BoardsComponent,
+    imports: [MockComponent(BoardsEmptyComponent)],
+    providers: [
+      provideMockSignalStore(BoardsStore),
+      MockProvider(BoardsService, {
+        getBoards: vi.fn(() => of([]))
+      })
+    ]
+  });
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [BoardsComponent]
-    });
-    fixture = TestBed.createComponent(BoardsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    fixture = spectator.fixture;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect.assertions(1);
+    expect(spectator.component).toBeTruthy();
   });
 });

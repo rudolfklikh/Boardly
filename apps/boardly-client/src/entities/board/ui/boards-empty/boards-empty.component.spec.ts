@@ -1,22 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {
+  createComponentFactory,
+  type Spectator
+} from '@ngneat/spectator/vitest';
+import { MockProvider } from 'ng-mocks';
+import { AnimationLoader } from 'ngx-lottie';
+import { of } from 'rxjs';
 import { BoardsEmptyComponent } from './boards-empty.component';
 
-describe('BoardsEmptyComponent', () => {
-  let component: BoardsEmptyComponent;
+describe('boardsEmptyComponent', () => {
+  let spectator: Spectator<BoardsEmptyComponent>;
   let fixture: ComponentFixture<BoardsEmptyComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [BoardsEmptyComponent]
-    }).compileComponents();
+  const createComponent = createComponentFactory({
+    component: BoardsEmptyComponent,
+    providers: [
+      MockProvider(AnimationLoader, {
+        loadAnimation: vi.fn(() => of())
+      })
+    ]
+  });
 
+  beforeEach(() => {
+    spectator = createComponent();
     fixture = TestBed.createComponent(BoardsEmptyComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect.assertions(1);
+    expect(spectator.component).toBeTruthy();
   });
 });

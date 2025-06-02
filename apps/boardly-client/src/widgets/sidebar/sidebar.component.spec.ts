@@ -2,6 +2,8 @@ import { provideRouter } from '@angular/router';
 import { provideMockSignalStore } from '@boardly/mock-signal-store';
 import { Spectator, createComponentFactory } from '@ngneat/spectator/vitest';
 import { MockProvider } from 'ng-mocks';
+import { of } from 'rxjs';
+import { mockCurrentUser } from '../../shared/mocks';
 import { AuthService } from '../../shared/services/auth/api/auth.service';
 import { SocketService } from '../../shared/services/socket/api/socket.service';
 import { CoreStore } from '../../shared/store/core.store';
@@ -16,7 +18,7 @@ describe('sidebarComponent', () => {
     providers: [
       MockProvider(AuthService, {
         login: vi.fn(),
-        getCurrentUser: vi.fn()
+        getCurrentUser: vi.fn().mockImplementation(() => of(mockCurrentUser))
       }),
       MockProvider(SocketService),
       provideRouter([]),

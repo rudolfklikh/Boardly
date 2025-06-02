@@ -1,21 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 
+import {
+  createComponentFactory,
+  type Spectator
+} from '@ngneat/spectator/vitest';
 import { InlineFormComponent } from './inline-form.component';
 
-describe('InlineFormComponent', () => {
-  let component: InlineFormComponent;
+describe('inlineFormComponent', () => {
+  let spectator: Spectator<InlineFormComponent>;
   let fixture: ComponentFixture<InlineFormComponent>;
 
+  const createComponent = createComponentFactory({
+    component: InlineFormComponent
+  });
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [InlineFormComponent]
-    });
-    fixture = TestBed.createComponent(InlineFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
+    fixture = spectator.fixture;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect.assertions(1);
+    expect(spectator.component).toBeTruthy();
   });
 });

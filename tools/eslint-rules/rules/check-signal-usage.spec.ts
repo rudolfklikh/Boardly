@@ -1,17 +1,6 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { RULE_NAME, rule } from './check-signal-usage';
 
-// TODO: figure out why when running through nx test task, TypeScript doesn't think that languageOptions exists on RuleTesterConfig
-// const ruleTester = new RuleTester({
-//   languageOptions: {
-//     parserOptions: {
-//       projectService: {
-//         allowDefaultProject: ['*.ts*']
-//       },
-//       tsconfigRootDir: './path/to/your/folder/fixture'
-//     }
-//   }
-// });
 describe('check-signal-usage', () => {
   it('should pass', () => {
     expect.assertions(0);
