@@ -42,8 +42,41 @@ jobs:
             !.github/workflows/ci.yml
             **.md
 
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    name: 'Lint'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.1.0
+
+      - name: Set node version to ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Check formatting
+        run: pnpm run prettier
+
+      # TODO - uncommenct when lint fixed
+      # - name: Lint
+      #   run: pnpm run lint
+
+      # From https://github.com/rhysd/actionlint/blob/main/docs/usage.md#use-actionlint-on-github-actions
+      - name: Check workflow files
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color -shellcheck=""
+
   test:
-    needs: changed
+    needs: [changed, lint]
     if: needs.changed.outputs.should_skip != 'true'
     timeout-minutes: 20
     runs-on: ${{ matrix.os }}
@@ -99,38 +132,7 @@ jobs:
     steps:
       - run: echo "Build & Test Failed"
 
-  lint:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    name: 'Lint'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4.1.0
-
-      - name: Set node version to ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          cache-dependency-path: '**/pnpm-lock.yaml'
-
-      - name: Install deps
-        run: pnpm install
-
-      - name: Check formatting
-        run: pnpm run prettier
-
-      # TODO - uncommenct when lint fixed
-      # - name: Lint
-      #   run: pnpm run lint
-
-      # From https://github.com/rhysd/actionlint/blob/main/docs/usage.md#use-actionlint-on-github-actions
-      - name: Check workflow files
-        run: |
-          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -color -shellcheck=""
+  
 
 # jobs:
 #   main:
