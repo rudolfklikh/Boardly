@@ -1,4 +1,5 @@
 /// <reference types='vitest' />
+/// <reference types='../../global/vite.config.d.ts' />
 import { defineConfig, mergeConfig } from 'vite';
 import vitestBase from '../../vite.base';
 

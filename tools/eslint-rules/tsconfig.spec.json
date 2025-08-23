@@ -10,5 +10,5 @@
       "vitest"
     ]
   },
-  "include": ["vitest.config.mts", "rules/**/*.spec.ts", "rules/**/*.d.ts"]
+  "include": ["vite.config.mts", "rules/**/*.spec.ts", "rules/**/*.d.ts"]
 }
