@@ -1,6 +1,5 @@
-/* eslint-disable functional/prefer-immutable-types */
 /* eslint-disable functional/immutable-data */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable functional/prefer-immutable-types */
 import {
   Type,
   isSignal,
@@ -22,10 +21,10 @@ import { vi, type Mock } from 'vitest';
 import { newFakeRxMethod, type FakeRxMethod } from './fake-rx-method';
 
 type NonRecord =
-  | Iterable<any>
-  | WeakSet<any>
-  | WeakMap<any, any>
-  | Promise<any>
+  | Iterable<never>
+  | WeakSet<never>
+  | WeakMap<never, never>
+  | Promise<never>
   | Date
   | Error
   | RegExp
@@ -39,7 +38,7 @@ type IsRecord<T> = T extends object
     : true
   : false;
 
-type Method<T extends readonly any[] = any[]> = (...args: T) => unknown;
+type Method<T extends readonly never[] = never[]> = (...args: T) => unknown;
 
 type InitialState<T> = T extends StateSource<infer U> ? U : never;
 
@@ -59,19 +58,57 @@ type SignalKeys<T> = {
  */
 type UnwrapSignal<T> = T extends Signal<infer U> ? U : never;
 
-export type MockSignalStore<T> = {
-  readonly [K in keyof T]: T[K] extends Signal<infer S>
-    ? IsRecord<T[K]> extends true
-      ? T[K] extends DeepSignal<infer D>
+/**
+ * Transforms a Signal property to its mockable equivalent
+ */
+type MockSignalProperty<T> =
+  T extends Signal<infer S>
+    ? IsRecord<T> extends true
+      ? T extends DeepSignal<infer D>
         ? DeepSignal<D>
-        : T[K]
+        : T
       : WritableSignal<S>
-    : T[K] extends RxMethod<infer R>
-      ? FakeRxMethod<R>
-      : T[K] extends Method
-        ? Mock<T[K]>
-        : T[K];
+    : never;
+
+/**
+ * Transforms an RxMethod property to its mockable equivalent
+ */
+type MockRxMethodProperty<T> =
+  T extends RxMethod<infer R> ? FakeRxMethod<R> : never;
+
+/**
+ * Transforms a Method property to its mockable equivalent
+ */
+type MockMethodProperty<T> = T extends Method ? Mock<T> : never;
+
+/**
+ * Determines the mockable type for a given property
+ */
+type MockProperty<T> =
+  | MockSignalProperty<T>
+  | MockRxMethodProperty<T>
+  | MockMethodProperty<T>
+  | T;
+
+export type MockSignalStore<T> = {
+  readonly [K in keyof T]: MockProperty<T[K]>;
 };
+
+/* Previous type implementation */
+
+// export type MockSignalStore<T> = {
+//   readonly [K in keyof T]: T[K] extends Signal<infer S>
+//     ? IsRecord<T[K]> extends true
+//       ? T[K] extends DeepSignal<infer D>
+//         ? DeepSignal<D>
+//         : T[K]
+//       : WritableSignal<S>
+//     : T[K] extends RxMethod<infer R>
+//       ? FakeRxMethod<R>
+//       : T[K] extends Method
+//         ? Mock<T[K]>
+//         : T[K];
+// };
 
 /**
  * Converts the type of a (mocked) SignalStore to a MockSignalStore
@@ -158,7 +195,9 @@ export function provideMockSignalStore<ClassType extends StateSource<object>>(
         (k) =>
           typeof store[k] === 'function' &&
           !isSignal(store[k]) &&
-          (store[k] as unknown as Record<keyof RxMethod<any>, any>)['destroy']
+          (store[k] as unknown as Record<keyof RxMethod<never>, never>)[
+            'destroy'
+          ]
       );
       const methods = keys.filter(
         (k) =>
@@ -181,7 +220,7 @@ export function provideMockSignalStore<ClassType extends StateSource<object>>(
             k in params.initialComputedValues
           ) {
             store[k] = signal(
-              (params.initialComputedValues as any)[k]
+              (params.initialComputedValues as never)[k]
             ) as unknown as ClassType[keyof object];
           } else {
             throw new Error(`${String(k)} should have an initial value`);
