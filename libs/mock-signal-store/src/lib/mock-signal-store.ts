@@ -13,8 +13,7 @@ import {
   getState,
   patchState,
   type DeepSignal,
-  type StateSource,
-  type WritableStateSource
+  type StateSource
 } from '@ngrx/signals';
 import { type RxMethod } from '@ngrx/signals/rxjs-interop';
 import { vi, type Mock } from 'vitest';
@@ -41,6 +40,7 @@ type IsRecord<T> = T extends object
 type Method<T extends readonly never[] = never[]> = (...args: T) => unknown;
 
 type InitialState<T> = T extends StateSource<infer U> ? U : never;
+type PartialIntialState<T> = Partial<InitialState<T>>;
 
 /**
  * Given a type T, determines the keys of the signal properties.
@@ -92,7 +92,7 @@ type MockProperty<T> =
 
 export type MockSignalStore<T> = {
   readonly [K in keyof T]: MockProperty<T[K]>;
-};
+} & { patchState: (state: PartialIntialState<T>) => void };
 
 /* Previous type implementation */
 
@@ -108,7 +108,7 @@ export type MockSignalStore<T> = {
 //       : T[K] extends Method
 //         ? Mock<T[K]>
 //         : T[K];
-// };
+// } & { patchState: (state: PartialIntialState<T>) => void };
 
 /**
  * Converts the type of a (mocked) SignalStore to a MockSignalStore
@@ -242,7 +242,7 @@ export function provideMockSignalStore<ClassType extends StateSource<object>>(
 
       if (params?.initialStatePatch) {
         untracked(() => {
-          patchState(store as unknown as WritableStateSource<object>, (s) => ({
+          patchState(store, (s) => ({
             ...s,
             ...params.initialStatePatch
           }));
@@ -253,7 +253,14 @@ export function provideMockSignalStore<ClassType extends StateSource<object>>(
         console.debug('Mocked store:', store);
       }
 
-      return store as MockSignalStore<ClassType>;
+      return {
+        ...store,
+        patchState: (state: object) =>
+          patchState(store, (s) => ({
+            ...s,
+            ...state
+          }))
+      };
     }
   };
 }
