@@ -2,34 +2,29 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   ElementRef,
-  computed,
   inject,
   signal,
   viewChild,
   type WritableSignal
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   EAuthSubmitAction,
   type LoginRequest,
   type RegisterRequest
 } from '../../shared/services/auth';
 import { CoreStore } from '../../shared/store/core.store';
+import { Field, form, required } from '@angular/forms/signals';
+import { FormErrorMessages } from '../../shared/components/form-error-messages/form-error-messages';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Field, FormErrorMessages],
   standalone: true
 })
 export class AuthComponent {
-  readonly #fb = inject(FormBuilder);
   readonly #coreStore = inject(CoreStore);
 
   readonly authContainer =
@@ -37,37 +32,29 @@ export class AuthComponent {
   readonly authSubmitActions = EAuthSubmitAction;
   readonly errorMessageS: WritableSignal<string | null> = signal(null);
 
-  readonly signInFormS = signal(
-    this.#fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    })
+  readonly signInForm = form(
+    signal({
+      email: '',
+      password: ''
+    }),
+    (context) => {
+      required(context.email);
+      required(context.password);
+    }
   );
 
-  readonly signUpFormS = signal(
-    this.#fb.group({
-      email: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    })
+  readonly signUpForm = form(
+    signal({
+      email: '',
+      username: '',
+      password: ''
+    }),
+    (context) => {
+      required(context.email);
+      required(context.username);
+      required(context.password);
+    }
   );
-
-  readonly authFormControlsS = computed(() => {
-    const { email: sigInEmail, password: signInPassword } =
-      this.signInFormS().controls;
-    const {
-      email: signUpEmail,
-      password: signUpPassword,
-      username: signUpUsername
-    } = this.signUpFormS().controls;
-    return {
-      sigInEmail,
-      signInPassword,
-      signUpEmail,
-      signUpPassword,
-      signUpUsername
-    };
-  });
 
   togglePanel(): void {
     this.authContainer().nativeElement.classList.toggle('right-panel-active');
@@ -84,12 +71,8 @@ export class AuthComponent {
     }
   }
 
-  showError(formControl: Readonly<FormControl>): boolean {
-    return formControl.invalid && (formControl.dirty || formControl.touched);
-  }
-
   private loginUser(): void {
-    const { value, valid } = this.signInFormS();
+    const { value, valid } = this.signInForm();
     if (!valid) {
       return;
     }
@@ -99,13 +82,13 @@ export class AuthComponent {
     };
 
     this.#coreStore.loginIn({
-      payload: value as LoginRequest,
+      payload: value() as LoginRequest,
       errorCallback: setError
     });
   }
 
   private registerUser(): void {
-    const { valid, value } = this.signUpFormS();
+    const { valid, value } = this.signUpForm();
     if (!valid) {
       return;
     }
@@ -115,17 +98,21 @@ export class AuthComponent {
     };
 
     this.#coreStore.registerUser({
-      payload: value as RegisterRequest,
+      payload: value() as RegisterRequest,
       errorCallback: setError
     });
   }
 
   private clearForms(): void {
-    this.signUpFormS().markAsUntouched();
-    this.signUpFormS().reset();
+    this.signUpForm().reset();
+    this.signUpForm().setControlValue({
+      email: '',
+      password: '',
+      username: ''
+    });
 
-    this.signInFormS().markAsUntouched();
-    this.signInFormS().reset();
+    this.signInForm().reset();
+    this.signInForm().setControlValue({ email: '', password: '' });
 
     this.errorMessageS.set(null);
   }

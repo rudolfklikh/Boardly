@@ -167,7 +167,7 @@
     z-index: 1;
   }
 
-  & form {
+  & section {
     @include mixins.flex-builder(center, center, column);
 
     gap: 12px;

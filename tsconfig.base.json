@@ -6,7 +6,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "lib": ["es2020", "dom"],
+    "lib": ["ESNext", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "importHelpers": true,

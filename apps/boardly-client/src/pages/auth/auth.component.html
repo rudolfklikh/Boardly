@@ -1,6 +1,6 @@
 <section #auth class="auth">
   <div class="auth__form-container sign-up-container">
-    <form [formGroup]="signUpFormS()">
+    <section>
       <h2 class="auth__title">Sign Up</h2>
 
       <div class="form__control">
@@ -11,16 +11,14 @@
           type="email"
           placeholder="Email"
           id="emailAuth"
-          formControlName="email"
-          [class.invalid]="showError(authFormControlsS().signUpEmail)"
+          [field]="signUpForm.email"
         />
 
-        @if (showError(authFormControlsS().signUpEmail)) {
-        <div class="auth__errors">
-          @if (authFormControlsS().signUpEmail.errors?.['required']) { The input
-          field is required }
-        </div>
-        }
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.email"
+          [errors]="signUpForm.email().errors()"
+        />
       </div>
 
       <div class="form__control">
@@ -31,16 +29,14 @@
           type="password"
           placeholder="Password"
           id="passwordAuth"
-          formControlName="password"
-          [class.invalid]="showError(authFormControlsS().signUpPassword)"
+          [field]="signUpForm.password"
         />
 
-        @if (showError(authFormControlsS().signUpPassword)) {
-        <div class="auth__errors">
-          @if (authFormControlsS().signUpPassword.errors?.['required']) { The
-          input field is required }
-        </div>
-        }
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.password"
+          [errors]="signUpForm.password().errors()"
+        />
       </div>
 
       <div class="form__control">
@@ -51,30 +47,28 @@
           type="text"
           placeholder="Name"
           id="name"
-          formControlName="username"
-          [class.invalid]="showError(authFormControlsS().signUpUsername)"
+          [field]="signUpForm.username"
         />
 
-        @if (showError(authFormControlsS().signUpUsername)) {
-        <div class="auth__errors">
-          @if (authFormControlsS().signUpUsername.errors?.['required']) { The
-          input field is required }
-        </div>
-        }
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.username"
+          [errors]="signUpForm.username().errors()"
+        />
       </div>
 
       <button
         type="button"
-        [class.disabled]="!signUpFormS().valid"
-        [disabled]="!signUpFormS().valid"
+        [class.disabled]="signUpForm().invalid()"
+        [disabled]="signUpForm().valid()"
         (click)="onSubmit(authSubmitActions.SIGN_UP)"
       >
         Sign Up
       </button>
-    </form>
+    </section>
   </div>
   <div class="auth__form-container sign-in-container">
-    <form [formGroup]="signInFormS()">
+    <section>
       <h2 class="auth__title">Sign in</h2>
 
       <div class="form__control">
@@ -85,16 +79,14 @@
           type="email"
           placeholder="Email"
           id="email"
-          formControlName="email"
-          [class.invalid]="showError(authFormControlsS().sigInEmail)"
+          [field]="signInForm.email"
         />
 
-        @if (showError(authFormControlsS().sigInEmail)) {
-        <div class="auth__errors">
-          @if (authFormControlsS().sigInEmail.errors?.['required']) { The input
-          field is required }
-        </div>
-        }
+        <form-error-messages
+          class="auth__errors"
+          [control]="signInForm.email"
+          [errors]="signInForm.email().errors()"
+        />
       </div>
       <div class="form__control">
         <label class="form__label" for="password"
@@ -104,28 +96,26 @@
           type="password"
           placeholder="Password"
           id="password"
-          formControlName="password"
-          [class.invalid]="showError(authFormControlsS().signInPassword)"
+          [field]="signInForm.password"
         />
 
-        @if (showError(authFormControlsS().signInPassword)) {
-        <div class="auth__errors">
-          @if (authFormControlsS().signInPassword.errors?.['required']) { The
-          input field is required }
-        </div>
-        }
+        <form-error-messages
+          class="auth__errors"
+          [control]="signInForm.password"
+          [errors]="signInForm.password().errors()"
+        />
       </div>
 
       <span class="auth__errors">{{ errorMessageS() }}</span>
       <button
         type="button"
-        [class.disabled]="!signInFormS().valid"
-        [disabled]="!signInFormS().valid"
+        [class.disabled]="signInForm().invalid()"
+        [disabled]="signInForm().invalid()"
         (click)="onSubmit(authSubmitActions.SIGN_IN)"
       >
         Sign In
       </button>
-    </form>
+    </section>
   </div>
   <div class="auth__overlay">
     <div class="overlay">
