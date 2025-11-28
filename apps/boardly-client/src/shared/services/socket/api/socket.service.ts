@@ -4,7 +4,9 @@ import { Socket, io } from 'socket.io-client';
 import { environment } from '../../../../environments/environment';
 import type { CurrentUser } from '../../../../shared/interfaces/current-user.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SocketService {
   #socket: Socket | undefined;
 

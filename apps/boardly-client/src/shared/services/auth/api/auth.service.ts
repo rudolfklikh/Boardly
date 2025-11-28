@@ -6,7 +6,9 @@ import { type CurrentUser } from '../../../../shared/interfaces/current-user.int
 import type { LoginRequest } from '../../../../shared/services/auth/model/login-request.interface';
 import type { RegisterRequest } from '../../../../shared/services/auth/model/register-request.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   readonly #http = inject(HttpClient);
 

@@ -12,8 +12,7 @@ import { provideRouter } from '@angular/router';
 
 import player from 'lottie-web';
 import { provideLottieOptions } from 'ngx-lottie';
-import { AuthInterceptor, AuthService } from '../shared/services/auth';
-import { SocketService } from '../shared/services/socket/api/socket.service';
+import { AuthInterceptor } from '../shared/services/auth';
 import { CoreStore } from '../shared/store/core.store';
 import { appRoutes } from './app.routes';
 
@@ -31,9 +30,6 @@ export const appConfig: Readonly<ApplicationConfig> = {
       useClass: AuthInterceptor,
       multi: true
     },
-    CoreStore,
-    // TODO remove when all modules are refactored
-    AuthService,
-    SocketService
+    CoreStore
   ]
 };
