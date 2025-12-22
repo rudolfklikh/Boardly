@@ -1,9 +1,10 @@
 import typescriptParser from '@typescript-eslint/parser';
 import angular from 'angular-eslint';
 import globals from 'globals';
+import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-export const angularESLintTemplate = tseslint.config({
+export const angularESLintTemplate = defineConfig({
   files: ['**/*.html'],
   extends: [...angular.configs.templateAll],
   rules: {
@@ -13,7 +14,7 @@ export const angularESLintTemplate = tseslint.config({
   }
 });
 
-export const angularESLint = tseslint.config({
+export const angularESLint = defineConfig({
   files: ['**/*.ts'],
   extends: [...angular.configs.tsRecommended, ...tseslint.configs.recommended],
   languageOptions: {
@@ -131,7 +132,7 @@ export const angularESLint = tseslint.config({
   }
 });
 
-export const declarationsESLint = tseslint.config({
+export const declarationsESLint = defineConfig({
   files: ['**/*.d.ts'],
   extends: [...angular.configs.tsRecommended, ...tseslint.configs.recommended],
   languageOptions: {

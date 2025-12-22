@@ -1,7 +1,7 @@
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import baseConfig from '../eslint.base.config.mjs';
 
-export default tseslint.config(...baseConfig, {
+export default defineConfig(...baseConfig, {
   files: ['**/*.ts'],
   rules: {
     'functional/immutable-data': ['off'],

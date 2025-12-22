@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import {
   angularESLint,
   angularESLintTemplate,
@@ -10,7 +10,7 @@ import {
   vitestESLint
 } from './tools/eslint-setup/index.mjs';
 
-export default tseslint.config(
+export default defineConfig(
   nx.configs['flat/base'],
   nx.configs['flat/typescript'],
   nx.configs['flat/javascript'],
