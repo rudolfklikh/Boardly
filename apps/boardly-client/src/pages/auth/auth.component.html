@@ -60,7 +60,7 @@
       <button
         type="button"
         [class.disabled]="signUpForm().invalid()"
-        [disabled]="signUpForm().valid()"
+        [disabled]="signUpForm().invalid()"
         (click)="onSubmit(authSubmitActions.SIGN_UP)"
       >
         Sign Up

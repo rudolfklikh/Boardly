@@ -3,6 +3,7 @@ import { defineConfig } from 'eslint/config';
 
 export const vitestESLint = defineConfig({
   files: ['**/*.spec.ts'],
+  ignores: ['**/e2e/**'],
   plugins: {
     vitest
   },
