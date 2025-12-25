@@ -1,17 +1,13 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { RULE_NAME, rule } from './no-signal-funcs-in-template';
 
-describe('no-signal-funcs-in-template', () => {
-  it('should pass', () => {
-    expect.assertions(0);
+const ruleTester = new RuleTester();
 
-    const ruleTester = new RuleTester();
-
-    ruleTester.run(RULE_NAME, rule, {
-      valid: [
-        {
-          name: 'no template defined',
-          code: `
+ruleTester.run(RULE_NAME, rule, {
+  valid: [
+    {
+      name: 'no template defined',
+      code: `
               import { input } from '@angular/core';
               @Component()
               export class ExampleComponent {
@@ -22,10 +18,10 @@ describe('no-signal-funcs-in-template', () => {
                       this.x.set(0);
                   }
               }`
-        },
-        {
-          name: 'use signal functions in component methods',
-          code: `
+    },
+    {
+      name: 'use signal functions in component methods',
+      code: `
               import { input } from '@angular/core';
               @Component({
                   selector: 'app-example',
@@ -39,11 +35,11 @@ describe('no-signal-funcs-in-template', () => {
                       this.x.set(0);
                   }
               }`
-        }
-      ],
-      invalid: [
-        {
-          code: `
+    }
+  ],
+  invalid: [
+    {
+      code: `
               import { input } from '@angular/core';
               @Component({
                   selector: 'app-example',
@@ -53,17 +49,15 @@ describe('no-signal-funcs-in-template', () => {
                   readonly x = input<number>();
                   constructor() {}
               }`,
-          errors: [
-            {
-              messageId: 'signalFuncUsedInTemplate',
-              data: {
-                signal: 'x',
-                func: 'set'
-              }
-            }
-          ]
+      errors: [
+        {
+          messageId: 'signalFuncUsedInTemplate',
+          data: {
+            signal: 'x',
+            func: 'set'
+          }
         }
       ]
-    });
-  });
+    }
+  ]
 });

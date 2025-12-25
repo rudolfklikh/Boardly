@@ -1,9 +1,5 @@
 import { Component, computed, input, signal } from '@angular/core';
-import {
-  CustomValidationError,
-  type FieldTree,
-  type ValidationError
-} from '@angular/forms/signals';
+import { type FieldTree, type ValidationError } from '@angular/forms/signals';
 import type { Config } from '../../interfaces/form-error-messages.config';
 
 @Component({
@@ -44,7 +40,7 @@ export class FormErrorMessages {
   }
 
   private toFieldName(error: ValidationError.WithField) {
-    return error.field().name().split('.').at(-1);
+    return error.fieldTree().name().split('.').at(-1);
   }
 
   private toMessage(error: Readonly<ValidationError>, config: Config): string {
@@ -69,7 +65,9 @@ export class FormErrorMessages {
       const errorProp = reg[2] ?? '';
       replacedMessage = replacedMessage.replace(
         reg[0],
-        (error as CustomValidationError)[errorProp] as string
+        (error as ValidationError & { [key: string]: string })[
+          errorProp
+        ] as string
       );
     }
 

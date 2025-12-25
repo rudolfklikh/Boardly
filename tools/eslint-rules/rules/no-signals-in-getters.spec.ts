@@ -1,16 +1,12 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { RULE_NAME, rule } from './no-signals-in-getters';
 
-describe('no-signals-in-getters', () => {
-  it('should pass', () => {
-    expect.assertions(0);
-
-    const ruleTester = new RuleTester();
-    ruleTester.run(RULE_NAME, rule, {
-      valid: [
-        {
-          name: 'signals can be used in methods',
-          code: `
+const ruleTester = new RuleTester();
+ruleTester.run(RULE_NAME, rule, {
+  valid: [
+    {
+      name: 'signals can be used in methods',
+      code: `
         import {signal} from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -26,9 +22,9 @@ describe('no-signals-in-getters', () => {
                 return this.x() + this.y();
             }
         }`
-        },
-        {
-          code: `
+    },
+    {
+      code: `
         import { signal, WritableSignal } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -43,11 +39,11 @@ describe('no-signals-in-getters', () => {
                 return this._name;
             }
         }`
-        }
-      ],
-      invalid: [
-        {
-          code: `
+    }
+  ],
+  invalid: [
+    {
+      code: `
         import { signal, WritableSignal } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -62,17 +58,17 @@ describe('no-signals-in-getters', () => {
                 return this._name;
             }
         }`,
-          errors: [
-            {
-              messageId: 'signalUsedInGetter',
-              data: {
-                signal: '_name'
-              }
-            }
-          ]
-        },
+      errors: [
         {
-          code: `
+          messageId: 'signalUsedInGetter',
+          data: {
+            signal: '_name'
+          }
+        }
+      ]
+    },
+    {
+      code: `
         import { signal, WritableSignal } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -88,22 +84,20 @@ describe('no-signals-in-getters', () => {
                 return this._firstName() + ' ' + this._lastName();
             }
         }`,
-          errors: [
-            {
-              messageId: 'signalUsedInGetter',
-              data: {
-                signal: '_firstName'
-              }
-            },
-            {
-              messageId: 'signalUsedInGetter',
-              data: {
-                signal: '_lastName'
-              }
-            }
-          ]
+      errors: [
+        {
+          messageId: 'signalUsedInGetter',
+          data: {
+            signal: '_firstName'
+          }
+        },
+        {
+          messageId: 'signalUsedInGetter',
+          data: {
+            signal: '_lastName'
+          }
         }
       ]
-    });
-  });
+    }
+  ]
 });

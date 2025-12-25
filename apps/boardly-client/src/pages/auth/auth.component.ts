@@ -14,14 +14,14 @@ import {
   type RegisterRequest
 } from '../../shared/services/auth';
 import { CoreStore } from '../../shared/store/core.store';
-import { Field, form, required } from '@angular/forms/signals';
+import { FormField, form, required } from '@angular/forms/signals';
 import { FormErrorMessages } from '../../shared/components/form-error-messages/form-error-messages';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  imports: [ReactiveFormsModule, Field, FormErrorMessages],
+  imports: [ReactiveFormsModule, FormField, FormErrorMessages],
   standalone: true
 })
 export class AuthComponent {

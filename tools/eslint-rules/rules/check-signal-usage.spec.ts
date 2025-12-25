@@ -1,16 +1,12 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { RULE_NAME, rule } from './check-signal-usage';
 
-describe('check-signal-usage', () => {
-  it('should pass', () => {
-    expect.assertions(0);
-
-    const ruleTester = new RuleTester();
-    ruleTester.run(RULE_NAME, rule, {
-      valid: [
-        {
-          name: 'allow usage in string templates and methods',
-          code: `
+const ruleTester = new RuleTester();
+ruleTester.run(RULE_NAME, rule, {
+  valid: [
+    {
+      name: 'allow usage in string templates and methods',
+      code: `
         import { input, computed } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -31,10 +27,10 @@ describe('check-signal-usage', () => {
                 return this.x() + this.y();
             }
         }`
-        },
-        {
-          name: 'support set and update method calls',
-          code: `
+    },
+    {
+      name: 'support set and update method calls',
+      code: `
         import { input, computed } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -54,10 +50,10 @@ describe('check-signal-usage', () => {
                 this.x.update((value) => value + 1);
             }
         }`
-        },
-        {
-          name: 'support required inputs',
-          code: `
+    },
+    {
+      name: 'support required inputs',
+      code: `
         import { input, computed } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -68,10 +64,10 @@ describe('check-signal-usage', () => {
 
             constructor() {}
         }`
-        },
-        {
-          name: 'allowed usage, but not preferred - separate suggestion rule',
-          code: `
+    },
+    {
+      name: 'allowed usage, but not preferred - separate suggestion rule',
+      code: `
         import { input, WritableSignal } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -85,20 +81,20 @@ describe('check-signal-usage', () => {
                 return this._firstName;
             }
         }`
-        },
-        {
-          name: 'no template or templateUrl',
-          code: `
+    },
+    {
+      name: 'no template or templateUrl',
+      code: `
         import { input, WritableSignal } from '@angular/core';
         @Component()
         export class ExampleComponent {
             readonly firstName = signal<string>('');
             constructor() {}
         }`
-        },
-        {
-          name: 'incorrect templateUrl - caught by compiler',
-          code: `
+    },
+    {
+      name: 'incorrect templateUrl - caught by compiler',
+      code: `
         import { input, WritableSignal } from '@angular/core';
         @Component({
           templateUrl: 'bad-file.html'
@@ -107,12 +103,12 @@ describe('check-signal-usage', () => {
             readonly firstName = signal<string>('');
             constructor() {}
         }`
-        }
-      ],
-      invalid: [
-        {
-          name: 'disallow usage in ng-zorro-antd modal service',
-          code: `
+    }
+  ],
+  invalid: [
+    {
+      name: 'disallow usage in ng-zorro-antd modal service',
+      code: `
       import { input, Type } from '@angular/core';
 
       class TestComponent {
@@ -143,17 +139,17 @@ describe('check-signal-usage', () => {
           });
         }
       }`,
-          errors: [
-            {
-              messageId: 'signalNotInvoked',
-              data: {
-                signal: 'name'
-              }
-            }
-          ]
-        },
+      errors: [
         {
-          code: `
+          messageId: 'signalNotInvoked',
+          data: {
+            signal: 'name'
+          }
+        }
+      ]
+    },
+    {
+      code: `
         import { input, computed } from '@angular/core';
         @Component({
             selector: 'app-example',
@@ -167,23 +163,23 @@ describe('check-signal-usage', () => {
             });
             constructor() {}
         }`,
-          errors: [
-            {
-              messageId: 'signalNotInvoked',
-              data: {
-                signal: 'firstName'
-              }
-            },
-            {
-              messageId: 'signalNotInvoked',
-              data: {
-                signal: 'lastName'
-              }
-            }
-          ]
+      errors: [
+        {
+          messageId: 'signalNotInvoked',
+          data: {
+            signal: 'firstName'
+          }
         },
         {
-          code: `
+          messageId: 'signalNotInvoked',
+          data: {
+            signal: 'lastName'
+          }
+        }
+      ]
+    },
+    {
+      code: `
           import { input, computed } from '@angular/core';
           @Component({
               selector: 'app-example',
@@ -197,16 +193,14 @@ describe('check-signal-usage', () => {
                 return this.x + this.y();
               }
           }`,
-          errors: [
-            {
-              messageId: 'signalNotInvoked',
-              data: {
-                signal: 'x'
-              }
-            }
-          ]
+      errors: [
+        {
+          messageId: 'signalNotInvoked',
+          data: {
+            signal: 'x'
+          }
         }
       ]
-    });
-  });
+    }
+  ]
 });

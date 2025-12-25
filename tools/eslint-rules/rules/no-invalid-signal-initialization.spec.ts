@@ -1,16 +1,12 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { RULE_NAME, rule } from './no-invalid-signal-initialization';
 
-describe('no-invalid-signal-initialization', () => {
-  it('shoud pass', () => {
-    expect.assertions(0);
-
-    const ruleTester = new RuleTester();
-    ruleTester.run(RULE_NAME, rule, {
-      valid: [
-        {
-          name: 'inputs and signals initialized properly',
-          code: `
+const ruleTester = new RuleTester();
+ruleTester.run(RULE_NAME, rule, {
+  valid: [
+    {
+      name: 'inputs and signals initialized properly',
+      code: `
             import { input, computed } from '@angular/core';
             @Component({
                 selector: 'app-example',
@@ -22,10 +18,10 @@ describe('no-invalid-signal-initialization', () => {
     
                 constructor() {}
             }`
-        },
-        {
-          name: 'support required inputs',
-          code: `
+    },
+    {
+      name: 'support required inputs',
+      code: `
             import { input, computed } from '@angular/core';
             @Component({
                 selector: 'app-example',
@@ -36,11 +32,11 @@ describe('no-invalid-signal-initialization', () => {
     
                 constructor() {}
             }`
-        }
-      ],
-      invalid: [
-        {
-          code: `
+    }
+  ],
+  invalid: [
+    {
+      code: `
             import { input, signal } from '@angular/core';
             @Component({
                 selector: 'app-example',
@@ -52,31 +48,29 @@ describe('no-invalid-signal-initialization', () => {
                 readonly type = input.required<string>;
                 constructor() {}
             }`,
-          errors: [
-            {
-              messageId: 'signalNotInitializedProperly',
-              data: {
-                prop: 'name',
-                func: 'input'
-              }
-            },
-            {
-              messageId: 'signalNotInitializedProperly',
-              data: {
-                prop: 'x',
-                func: 'signal'
-              }
-            },
-            {
-              messageId: 'signalNotInitializedProperly',
-              data: {
-                prop: 'type',
-                func: 'input'
-              }
-            }
-          ]
+      errors: [
+        {
+          messageId: 'signalNotInitializedProperly',
+          data: {
+            prop: 'name',
+            func: 'input'
+          }
+        },
+        {
+          messageId: 'signalNotInitializedProperly',
+          data: {
+            prop: 'x',
+            func: 'signal'
+          }
+        },
+        {
+          messageId: 'signalNotInitializedProperly',
+          data: {
+            prop: 'type',
+            func: 'input'
+          }
         }
       ]
-    });
-  });
+    }
+  ]
 });
