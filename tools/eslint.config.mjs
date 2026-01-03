@@ -14,7 +14,7 @@ export default defineConfig(
     }
   },
   {
-    files: ['./eslint-rules/**/*.ts'],
+    files: ['./eslint-rules/**/*.spec.ts'],
     rules: {
       'vitest/require-hook': ['off']
     }

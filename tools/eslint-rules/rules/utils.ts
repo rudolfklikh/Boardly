@@ -69,35 +69,47 @@ export function usedInNzComponentParams(
   return false;
 }
 
-// eslint-disable-next-line complexity
+function readTemplateFile(
+  fileName: string,
+  componentFileName: string
+): string | null {
+  const filePath = path.join(path.dirname(componentFileName), fileName);
+  return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : null;
+}
+
+function findPropertyValue(
+  properties: TSESTree.Property[],
+  name: string
+): TSESTree.Literal | null {
+  const prop = properties.find(
+    (p) => isIdentifier(p.key) && p.key.name === name
+  );
+  return prop && isLiteral(prop.value) ? prop.value : null;
+}
+
 export function getTemplate(
   node: TSESTree.CallExpression,
   componentFileName: string
 ): string | null {
-  if (node.arguments.length !== 1 || !isObjectExpression(node.arguments[0])) {
+  const [firstArg] = node.arguments;
+  if (!firstArg || !isObjectExpression(firstArg)) {
     return null;
   }
-  const arg = node.arguments[0];
-  const properties = arg.properties.filter(isProperty);
-  const templateProp = properties.find(
-    (property) => isIdentifier(property.key) && property.key.name === 'template'
-  );
-  if (templateProp && isLiteral(templateProp.value)) {
-    return templateProp.value.value as string;
-  }
-  const templateUrlProp = properties.find(
-    (property) =>
-      isIdentifier(property.key) && property.key.name === 'templateUrl'
-  );
-  if (templateUrlProp && isLiteral(templateUrlProp.value)) {
-    const fileName = templateUrlProp.value.value as string;
-    const filePath = path.join(path.dirname(componentFileName), fileName);
+  const properties = firstArg.properties.filter(isProperty);
 
-    if (fs.existsSync(filePath)) {
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
-      return fileContent;
-    }
+  const templateLiteral = findPropertyValue(properties, 'template');
+  if (templateLiteral) {
+    return templateLiteral.value as string;
   }
+
+  const templateUrlLiteral = findPropertyValue(properties, 'templateUrl');
+  if (templateUrlLiteral) {
+    return readTemplateFile(
+      templateUrlLiteral.value as string,
+      componentFileName
+    );
+  }
+
   return null;
 }
 
