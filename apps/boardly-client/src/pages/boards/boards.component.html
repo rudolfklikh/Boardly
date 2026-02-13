@@ -21,22 +21,22 @@
     [class.boards__container--empty]="!boards()?.length"
   >
     @if (boards()?.length) { @for (board of boards(); track board.id) {
-    <app-board-card [board]="board"></app-board-card>
+    <app-board-card [board]="board" />
     }
     <div class="boards__container__add-button" (click)="createNewBoard()">
       <img src="/assets/plus.svg" alt="add" title="add" />
     </div>
     } @else {
-    <app-boards-empty (boardCreation)="createBoard($event)"></app-boards-empty>
+    <app-boards-empty (boardCreation)="createBoard($event)" />
     }
   </div>
   } @else {
   <div class="boards__loading">
     <mat-progress-spinner
-      [mode]="'indeterminate'"
-      [value]="50"
       class="example-margin"
-    ></mat-progress-spinner>
+      mode="indeterminate"
+      [value]="50"
+    />
   </div>
   }
 </section>

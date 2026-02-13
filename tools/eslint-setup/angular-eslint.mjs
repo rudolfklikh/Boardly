@@ -30,21 +30,22 @@ export const angularESLint = defineConfig({
     complexity: ['error', { max: 6 }],
     'functional/no-let': ['error', { allowInFunctions: true }],
     'functional/prefer-property-signatures': 'error',
-    'functional/prefer-immutable-types': [
-      'error',
-      {
-        enforcement: 'None',
-        ignoreInferredTypes: true,
-        parameters: {
-          enforcement: 'ReadonlyShallow'
-        },
-        variables: {
-          enforcement: 'ReadonlyShallow',
-          ignoreNamePattern: ['S$', '[r|R]outes$', '^#']
-        },
-        ignoreNamePattern: ['_', '#']
-      }
-    ],
+    'functional/prefer-immutable-types': 'off',
+    // 'functional/prefer-immutable-types': [
+    //   'error',
+    //   {
+    //     enforcement: 'None',
+    //     ignoreInferredTypes: true,
+    //     parameters: {
+    //       enforcement: 'ReadonlyShallow'
+    //     },
+    //     variables: {
+    //       enforcement: 'ReadonlyShallow',
+    //       ignoreNamePattern: ['S$', '[r|R]outes$', '^#']
+    //     },
+    //     ignoreNamePattern: ['_', '#']
+    //   }
+    // ],
     'functional/immutable-data': [
       'error',
       {

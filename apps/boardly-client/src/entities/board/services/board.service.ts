@@ -1,6 +1,5 @@
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { type Board } from '../../../entities/board/model/board.interface';
 import { type Column } from '../../../entities/board/model/column.interface';
 import { type Task } from '../../../entities/board/model/task.interface';
@@ -9,71 +8,57 @@ import { SocketEvents } from '../../../shared/services/socket/model/socket-event
 
 @Injectable()
 export class BoardService {
-  board$ = new BehaviorSubject<Board | null>(null);
-  columns$ = new BehaviorSubject<Column[]>([]);
-
-  constructor(private socketService: SocketService) {}
+  readonly board = signal<Board | null>(null);
+  readonly columns = signal<Column[]>([]);
+  readonly #socketService: SocketService;
 
   setBoard(board: Board): void {
-    this.board$.next(board);
+    this.board.set(board);
   }
 
   setColumns(columns: Column[]): void {
-    this.columns$.next(columns);
+    this.columns.set(columns);
   }
 
   setTasks(tasks: Task[], columnID: string): void {
-    const columnIndex = this.columns$
-      .getValue()
-      .findIndex((col) => col.id === columnID);
+    this.columns.update((columns) => {
+      const columnIndex = columns.findIndex((col) => col.id === columnID);
+      if (columnIndex === -1) return columns;
 
-    if (columnIndex !== -1) {
-      const updatedColumn = this.columns$.getValue()[columnIndex];
-      const columns = [...this.columns$.getValue()];
-
-      columns.splice(columnIndex, 1, { ...updatedColumn!, tasks });
-
-      this.columns$.next(columns);
-    }
+      return columns.map((col, i) =>
+        i === columnIndex ? { ...col, tasks } : col
+      );
+    });
   }
 
   addColumn(column: Column): void {
-    const columns = [...(this.columns$.getValue() ?? [])];
-    const isColumnExist = !!columns.find((col) => col.id === column.id);
-
-    if (!isColumnExist) {
-      this.columns$.next([...this.columns$.getValue(), column]);
-    }
+    this.columns.update((columns) => {
+      const isColumnExist = columns.some((col) => col.id === column.id);
+      return isColumnExist ? columns : [...columns, column];
+    });
   }
 
   addTask(task: Task): void {
-    const columnIndx = this.columns$
-      .getValue()
-      .findIndex((col) => col.id === task.columnId);
+    this.columns.update((columns) => {
+      const columnIndex = columns.findIndex((col) => col.id === task.columnId);
+      if (columnIndex === -1) return columns;
 
-    if (columnIndx !== -1) {
-      const updatedColumn = this.columns$.getValue()[columnIndx];
-      const columns = [...this.columns$.getValue()];
-      const tasks = [...(updatedColumn!.tasks ?? [])];
-      const isTaskExist = !!tasks.find((t) => t.id === task.id);
+      const column = columns[columnIndex]!;
+      const isTaskExist = (column.tasks ?? []).some((t) => t.id === task.id);
+      if (isTaskExist) return columns;
 
-      if (!isTaskExist) {
-        columns.splice(columnIndx, 1, {
-          ...updatedColumn!,
-          tasks: [...(updatedColumn!.tasks ?? []), task]
-        });
-        this.columns$.next(columns);
-      }
-    }
+      return columns.map((col, i) =>
+        i === columnIndex
+          ? { ...col, tasks: [...(col.tasks ?? []), task] }
+          : col
+      );
+    });
   }
 
   updateColumn(column: Column): void {
-    const columns = [...(this.columns$.getValue() ?? [])];
-    const columnIndex = columns.findIndex((col) => col.id === column.id);
-
-    columns.splice(columnIndex, 1, column);
-
-    this.columns$.next(columns);
+    this.columns.update((columns) =>
+      columns.map((col) => (col.id === column.id ? column : col))
+    );
   }
 
   updateColumnOrder(
@@ -81,14 +66,14 @@ export class BoardService {
     previousIndex: number,
     currentIndex: number
   ): void {
-    const columns = [...(this.columns$.getValue() ?? [])];
-    const columnIndex = columns.findIndex((col) => col.id === column.id);
+    this.columns.update((columns) => {
+      const columnIndex = columns.findIndex((col) => col.id === column.id);
+      if (columnIndex === -1) return columns;
 
-    if (columnIndex !== -1) {
-      moveItemInArray(columns, previousIndex, currentIndex);
-
-      this.columns$.next(columns);
-    }
+      const updated = [...columns];
+      moveItemInArray(updated, previousIndex, currentIndex);
+      return updated;
+    });
   }
 
   updateTaskPosition(
@@ -98,42 +83,39 @@ export class BoardService {
     currentIndex: number,
     dropVertically: boolean
   ): void {
-    const columns = [...(this.columns$.getValue() ?? [])];
-    const columnIndex = columns.findIndex((col) => col.id === task.columnId);
-    const tasks = [...(column.tasks ?? [])];
+    this.columns.update((columns) => {
+      const columnIndex = columns.findIndex((col) => col.id === task.columnId);
+      if (columnIndex === -1) return columns;
 
-    if (dropVertically && columnIndex !== -1) {
-      moveItemInArray(tasks, previousIndex, currentIndex);
+      const tasks = [...(column.tasks ?? [])];
 
-      const updatedColumn = { ...column, tasks: tasks };
-      columns.splice(columnIndex, 1, updatedColumn);
+      if (dropVertically) {
+        moveItemInArray(tasks, previousIndex, currentIndex);
 
-      this.columns$.next(columns);
-    } else if (!dropVertically && columnIndex !== -1) {
+        return columns.map((col, i) =>
+          i === columnIndex ? { ...col, tasks } : col
+        );
+      }
+
       const updatedColumnIndex = columns.findIndex(
         (col) => col.id === column.id
       );
-      const previousTasks = columns[columnIndex]?.tasks ?? [];
+      const previousTasks = [...(columns[columnIndex]?.tasks ?? [])];
 
       transferArrayItem(previousTasks, tasks, previousIndex, currentIndex);
 
-      const updatedColumn = { ...column, tasks: tasks };
-      const updatedPreviousColumn = {
-        ...columns[columnIndex],
-        tasks: previousTasks
-      };
-
-      columns.splice(columnIndex, 1, updatedPreviousColumn as any);
-      columns.splice(updatedColumnIndex, 1, updatedColumn);
-
-      this.columns$.next(columns);
-    }
+      return columns.map((col, i) => {
+        if (i === columnIndex) return { ...col, tasks: previousTasks };
+        if (i === updatedColumnIndex) return { ...col, tasks };
+        return col;
+      });
+    });
   }
 
   leaveBoard(boardId: string): void {
-    this.board$.next(null);
-    this.columns$.next([]);
+    this.board.set(null);
+    this.columns.set([]);
 
-    this.socketService.emit(SocketEvents.BOARDS_LEAVE, { boardId });
+    this.#socketService.emit(SocketEvents.BOARDS_LEAVE, { boardId });
   }
 }

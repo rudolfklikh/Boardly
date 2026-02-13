@@ -6,9 +6,10 @@ import {
   withMethods,
   withState
 } from '@ngrx/signals';
-import { Observable, delay, finalize, take } from 'rxjs';
+import { delay, finalize, pipe, switchMap, take, tap } from 'rxjs';
 import { BoardsService } from '../../../entities/board/api/boards.service';
 import { type Board } from '../../../entities/board/model/board.interface';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 interface BoardsState {
   boards: Board[];
@@ -23,16 +24,12 @@ const initialState: Readonly<BoardsState> = {
 export const BoardsStore = signalStore(
   withState(initialState),
   withMethods((store, boardsService = inject(BoardsService)) => ({
-    getBoards$(): Observable<Board[]> {
-      return boardsService.getBoards().pipe(take(1));
-    },
     createBoard$(title: string): void {
       this.updateIsLoading(true);
 
       boardsService
         .createBoard(title)
         .pipe(
-          take(1),
           delay(500),
           finalize(() => this.updateIsLoading(false))
         )
@@ -46,18 +43,20 @@ export const BoardsStore = signalStore(
     },
     patchBoards(boards: Board[]) {
       patchState(store, { boards: [...store.boards(), ...boards] });
-    }
+    },
+    getBoards: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true })),
+        switchMap(() => boardsService.getBoards()),
+        take(1),
+        tap((boards) => patchState(store, { boards })),
+        tap(() => patchState(store, { isLoading: false }))
+      )
+    )
   })),
   withHooks({
-    onInit({ updateIsLoading, getBoards$, setBoards }) {
-      updateIsLoading(true);
-
-      getBoards$()
-        .pipe(
-          take(1),
-          finalize(() => updateIsLoading(false))
-        )
-        .subscribe((boards) => setBoards(boards));
+    onInit({ getBoards }) {
+      getBoards();
     }
   })
 );

@@ -15,8 +15,7 @@ export const appRoutes: Routes = [
       },
       {
         path: 'boards',
-        loadChildren: () =>
-          import('../pages/boards/boards.module').then((m) => m.BoardsModule),
+        loadChildren: () => import('../pages/boards/boards.routes'),
         canActivate: [HOME_GUARD]
       },
       {

@@ -1,51 +1,54 @@
-<el-topbar></el-topbar>
+<el-topbar />
 
-<div class="board" *ngIf="data$ | async as data">
+@if(data(); as boardData) {
+<div class="board">
   <div
     class="columns"
     cdkDropList
     cdkDropListGroup
-    [cdkDropListData]="data.columns"
-    (cdkDropListDropped)="changeColumnPosition($event)"
     cdkDropListOrientation="horizontal"
+    [cdkDropListData]="boardData.columns"
+    (cdkDropListDropped)="changeColumnPosition($event)"
   >
+    @for (column of boardData.columns; track column.id) {
     <div
       class="column"
-      *ngFor="let column of data.columns; trackBy: trackById"
       cdkDrag
+      cdkDropList
       cdkDragLockAxis="x"
       [cdkDragData]="column"
-      cdkDropList
       (cdkDropListDropped)="changeTaskPosition($event, column)"
     >
       <div class="column-title">{{ column.title }}</div>
 
       <div class="tasks">
-        <div
-          *ngFor="let task of column?.tasks; trackBy: trackById"
-          class="task"
-          cdkDrag
-          [cdkDragData]="task"
-        >
+        @for (task of column?.tasks; track task.id) {
+        <div class="task" cdkDrag [cdkDragData]="task">
           <div class="task-title">{{ task.title }}</div>
         </div>
+        }
+
         <el-inline-form
           class="create-column-form"
           defaultText="Add a task"
-          [hasButton]="true"
           buttonText="Add task"
           inputPlaceholder="Add task name"
+          [hasButton]="true"
           (handleSubmit)="createTask($event, column.id)"
-        ></el-inline-form>
+        />
       </div>
     </div>
+    }
+
     <el-inline-form
       class="create-column-form"
       defaultText="Add a list"
-      [hasButton]="true"
-      buttonText="Add list"
       inputPlaceholder="Add column name"
+      buttonText="Add list"
+      [hasButton]="true"
       (handleSubmit)="createColumn($event)"
-    ></el-inline-form>
+    />
   </div>
 </div>
+
+}
