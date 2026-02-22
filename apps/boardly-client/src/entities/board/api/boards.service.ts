@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { type Board } from '../../../entities/board/model/board.interface';
 import { environment } from '../../../environments/environment';
 
@@ -9,7 +9,9 @@ export class BoardsService {
   #http = inject(HttpClient);
 
   getBoards(): Observable<Board[]> {
-    return this.#http.get<Board[]>(`${environment.apiUrl}/boards`);
+    return this.#http
+      .get<Board[]>(`${environment.apiUrl}/boards`)
+      .pipe(catchError(() => of([])));
   }
 
   getBoard(boardId: string): Observable<Board> {
