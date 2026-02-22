@@ -1,0 +1,54 @@
+<el-topbar />
+
+@if(data(); as boardData) {
+<div class="board">
+  <div
+    class="columns"
+    cdkDropList
+    cdkDropListGroup
+    cdkDropListOrientation="horizontal"
+    [cdkDropListData]="boardData.columns"
+    (cdkDropListDropped)="changeColumnPosition($event)"
+  >
+    @for (column of boardData.columns; track column.id) {
+    <div
+      class="column"
+      cdkDrag
+      cdkDropList
+      cdkDragLockAxis="x"
+      [cdkDragData]="column"
+      (cdkDropListDropped)="changeTaskPosition($event, column)"
+    >
+      <div class="column-title">{{ column.title }}</div>
+
+      <div class="tasks">
+        @for (task of column?.tasks; track task.id) {
+        <div class="task" cdkDrag [cdkDragData]="task">
+          <div class="task-title">{{ task.title }}</div>
+        </div>
+        }
+
+        <el-inline-form
+          class="create-column-form"
+          defaultText="Add a task"
+          buttonText="Add task"
+          inputPlaceholder="Add task name"
+          [hasButton]="true"
+          (handleSubmit)="createTask($event, column.id)"
+        />
+      </div>
+    </div>
+    }
+
+    <el-inline-form
+      class="create-column-form"
+      defaultText="Add a list"
+      inputPlaceholder="Add column name"
+      buttonText="Add list"
+      [hasButton]="true"
+      (handleSubmit)="createColumn($event)"
+    />
+  </div>
+</div>
+
+}

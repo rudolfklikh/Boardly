@@ -1,0 +1,54 @@
+<div class="main-container">
+  @let approversValue = approvers(); @let ldapIdValue = ldapId();
+
+  <div class="container header">
+    <span class="title">Text2Confirm Status</span>
+  </div>
+  <div class="container subheader">
+    <span class="column-title text-status">Text Status</span>
+    <span class="column-title time-sent">Time Sent</span>
+    <span class="column-title default-column">Time Elapsed</span>
+    <span class="column-title sent-to">Sent to</span>
+
+    @if (approversValue.length) {
+    <span
+      class="column-title default-column"
+      data-testid="t2c-status__approver-header"
+    >
+      Approver Name
+    </span>
+    } @if (ldapIdValue) {
+    <span class="column-title sent-by" data-testid="t2c-status__user-header">
+      Sent by
+    </span>
+    }
+  </div>
+
+  <div class="container content">
+    <order-up-approval-status [status]="status()"></order-up-approval-status>
+
+    <span>{{ timeSent() | date:'hh:mm aaa' }}</span>
+    <span>{{ elapsedTime() | timeFormat }}</span>
+
+    @if (approversValue.length) {
+    <div class="multiple-item" data-testid="t2c-status__phone">
+      @for (approver of approversValue; track approver.phoneNumber) {
+      <span>{{ approver.phoneNumber | phone }}</span>
+      }
+    </div>
+
+    <div
+      class="default-column content-item multiple-item"
+      data-testid="t2c-status__approver"
+    >
+      @for (approver of approversValue; track approver.name) {
+      <span>{{ approver.name }}</span>
+      }
+    </div>
+    } @if (ldapIdValue) {
+    <div class="sent-by content-item" data-testid="t2c-status__user">
+      <span>{{ ldapIdValue }}</span>
+    </div>
+    }
+  </div>
+</div>

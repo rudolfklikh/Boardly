@@ -5,15 +5,14 @@
     "baseUrl": ".",
     "target": "ESNext",
     "module": "ESNext",
+    "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "lib": ["es2020", "dom"],
-    "sourceMap": true,
+    "lib": ["ESNext", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "importHelpers": true,
     "strictPropertyInitialization": false,
     "strict": true,
-    "declaration": false,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "allowSyntheticDefaultImports": true,
@@ -26,7 +25,10 @@
     "allowJs": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "paths": {}
+    "paths": {
+      "@boardly/*": ["apps/boardly-client/src/*"],
+      "@boardly/mock-signal-store": ["libs/mock-signal-store/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

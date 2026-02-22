@@ -1,0 +1,8 @@
+{
+  "name": "mock-signal-store",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mock-signal-store/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": []
+}

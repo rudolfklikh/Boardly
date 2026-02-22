@@ -1,13 +1,22 @@
-import baseConfig from '../eslint.config.mjs';
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
+import baseConfig from '../eslint.base.config.mjs';
 
-export default tseslint.config(...baseConfig, {
-  files: ['**/*.ts'],
-  rules: {
-    'functional/immutable-data': ['off'],
-    'functional/no-loop-statements': ['off'],
-    '@typescript-eslint/no-explicit-any': ['off'],
-    'no-extra-boolean-cast': ['off'],
-    'functional/prefer-immutable-types': 'off'
+export default defineConfig(
+  ...baseConfig,
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'functional/immutable-data': ['off'],
+      'functional/no-loop-statements': ['off'],
+      '@typescript-eslint/no-explicit-any': ['off'],
+      'no-extra-boolean-cast': ['off'],
+      'functional/prefer-immutable-types': 'off'
+    }
+  },
+  {
+    files: ['./eslint-rules/**/*.spec.ts'],
+    rules: {
+      'vitest/require-hook': ['off']
+    }
   }
-});
+);

@@ -1,0 +1,142 @@
+<section #auth class="auth">
+  <div class="auth__form-container sign-up-container">
+    <section>
+      <h2 class="auth__title">Sign Up</h2>
+
+      <div class="form__control">
+        <label class="form__label" for="emailAuth"
+          >Email<span class="form__required">*</span></label
+        >
+        <input
+          type="email"
+          placeholder="Email"
+          id="emailAuth"
+          [formField]="signUpForm.email"
+        />
+
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.email"
+          [errors]="signUpForm.email().errors()"
+        />
+      </div>
+
+      <div class="form__control">
+        <label class="form__label" for="passwordAuth"
+          >Password<span class="form__required">*</span></label
+        >
+        <input
+          type="password"
+          placeholder="Password"
+          id="passwordAuth"
+          [formField]="signUpForm.password"
+        />
+
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.password"
+          [errors]="signUpForm.password().errors()"
+        />
+      </div>
+
+      <div class="form__control">
+        <label class="form__label" for="name"
+          >Name<span class="form__required">*</span></label
+        >
+        <input
+          type="text"
+          placeholder="Name"
+          id="name"
+          [formField]="signUpForm.username"
+        />
+
+        <form-error-messages
+          class="auth__errors"
+          [control]="signUpForm.username"
+          [errors]="signUpForm.username().errors()"
+        />
+      </div>
+
+      <button
+        type="button"
+        [class.disabled]="signUpForm().invalid()"
+        [disabled]="signUpForm().invalid()"
+        (click)="onSubmit(authSubmitActions.SIGN_UP)"
+      >
+        Sign Up
+      </button>
+    </section>
+  </div>
+  <div class="auth__form-container sign-in-container">
+    <section>
+      <h2 class="auth__title">Sign in</h2>
+
+      <div class="form__control">
+        <label class="form__label" for="email"
+          >Email<span class="form__required">*</span></label
+        >
+        <input
+          type="email"
+          placeholder="Email"
+          id="email"
+          [formField]="signInForm.email"
+        />
+
+        <form-error-messages
+          class="auth__errors"
+          [control]="signInForm.email"
+          [errors]="signInForm.email().errors()"
+        />
+      </div>
+      <div class="form__control">
+        <label class="form__label" for="password"
+          >Password<span class="form__required">*</span></label
+        >
+        <input
+          type="password"
+          placeholder="Password"
+          id="password"
+          [formField]="signInForm.password"
+        />
+
+        <form-error-messages
+          class="auth__errors"
+          [control]="signInForm.password"
+          [errors]="signInForm.password().errors()"
+        />
+      </div>
+
+      <span class="auth__errors">{{ errorMessageS() }}</span>
+      <button
+        type="button"
+        [class.disabled]="signInForm().invalid()"
+        [disabled]="signInForm().invalid()"
+        (click)="onSubmit(authSubmitActions.SIGN_IN)"
+      >
+        Sign In
+      </button>
+    </section>
+  </div>
+  <div class="auth__overlay">
+    <div class="overlay">
+      <div class="auth__overlay__panel overlay-left">
+        <h2 class="auth__overlay__title">Welcome Back!</h2>
+        <p class="auth__overlay__subtitle">
+          To keep connected with us please login with your personal info
+        </p>
+        <button type="button" class="ghost" (click)="togglePanel()">
+          Sign In
+        </button>
+      </div>
+      <div class="auth__overlay__panel overlay-right">
+        <h2 class="auth__overlay__title">Hello, Friend!</h2>
+        <p class="auth__overlay__subtitle">
+          Enter your personal details and start journey with us
+        </p>
+        <button type="button" class="ghost" (click)="togglePanel()">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,18 +1,20 @@
-import tseslint from 'typescript-eslint';
 import typescriptParser from '@typescript-eslint/parser';
-import globals from 'globals';
 import angular from 'angular-eslint';
+import globals from 'globals';
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
 
-export const angularESLintTemplate = tseslint.config({
+export const angularESLintTemplate = defineConfig({
   files: ['**/*.html'],
   extends: [...angular.configs.templateAll],
   rules: {
+    '@angular-eslint/template/no-call-expression': ['warn'],
     '@angular-eslint/template/i18n': 'off',
     '@angular-eslint/template/prefer-ngsrc': 'warn'
   }
 });
 
-export const angularESLint = tseslint.config({
+export const angularESLint = defineConfig({
   files: ['**/*.ts'],
   extends: [...angular.configs.tsRecommended, ...tseslint.configs.recommended],
   languageOptions: {
@@ -28,17 +30,22 @@ export const angularESLint = tseslint.config({
     complexity: ['error', { max: 6 }],
     'functional/no-let': ['error', { allowInFunctions: true }],
     'functional/prefer-property-signatures': 'error',
-    'functional/prefer-immutable-types': [
-      'error',
-      {
-        enforcement: 'None',
-        ignoreInferredTypes: true,
-        parameters: {
-          enforcement: 'ReadonlyDeep'
-        },
-        ignoreNamePattern: ['_', '#']
-      }
-    ],
+    'functional/prefer-immutable-types': 'off',
+    // 'functional/prefer-immutable-types': [
+    //   'error',
+    //   {
+    //     enforcement: 'None',
+    //     ignoreInferredTypes: true,
+    //     parameters: {
+    //       enforcement: 'ReadonlyShallow'
+    //     },
+    //     variables: {
+    //       enforcement: 'ReadonlyShallow',
+    //       ignoreNamePattern: ['S$', '[r|R]outes$', '^#']
+    //     },
+    //     ignoreNamePattern: ['_', '#']
+    //   }
+    // ],
     'functional/immutable-data': [
       'error',
       {
@@ -92,7 +99,12 @@ export const angularESLint = tseslint.config({
     '@typescript-eslint/no-require-imports': 'warn',
     '@typescript-eslint/no-unused-expressions': 'error',
     '@typescript-eslint/no-empty-object-type': 'warn',
-    'functional/no-mixed-types': 'error',
+    'functional/no-mixed-types': [
+      'error',
+      {
+        checkInterfaces: false
+      }
+    ],
     'functional/no-loop-statements': 'error',
     'no-param-reassign': 'error',
     'prefer-const': 'error',
@@ -109,11 +121,19 @@ export const angularESLint = tseslint.config({
     'no-underscore-dangle': 'off',
     'no-extra-semi': 'off',
     '@nx/workspace-no-reactive-select-signal': 'error',
-    '@nx/workspace-forbid-on-destroy': 'error'
+    '@nx/workspace-forbid-on-destroy': 'error',
+    '@nx/workspace-check-signal-usage': [
+      'error',
+      { ignoreNzComponentParams: true }
+    ],
+    '@nx/workspace-check-signal-usage-template': 'error',
+    '@nx/workspace-no-signal-funcs-in-template': 'error',
+    '@nx/workspace-no-invalid-signal-initialization': 'error',
+    '@nx/workspace-no-signals-in-getters': 'error'
   }
 });
 
-export const declarationsESLint = tseslint.config({
+export const declarationsESLint = defineConfig({
   files: ['**/*.d.ts'],
   extends: [...angular.configs.tsRecommended, ...tseslint.configs.recommended],
   languageOptions: {

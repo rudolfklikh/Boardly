@@ -1,6 +1,6 @@
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
-export const nxLintBoundaries = tseslint.config({
+export const nxLintBoundaries = defineConfig({
   files: ['**/*.ts', '**/*.js'],
   rules: {
     '@nx/enforce-module-boundaries': [

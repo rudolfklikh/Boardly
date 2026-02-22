@@ -1,0 +1,8 @@
+{
+  "enabledPlugins": {
+    "code-cleanup@clarchik-claude-code": true,
+    "code-explain@clarchik-claude-code": true,
+    "code-optimize@clarchik-claude-code": true,
+    "mcp-integrations@clarchik-claude-code": true
+  }
+}

@@ -1,8 +1,9 @@
 import vitest from '@vitest/eslint-plugin';
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
-export const vitestESLint = tseslint.config({
+export const vitestESLint = defineConfig({
   files: ['**/*.spec.ts'],
+  ignores: ['**/e2e/**'],
   plugins: {
     vitest
   },
@@ -14,10 +15,6 @@ export const vitestESLint = tseslint.config({
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-function': 'off',
-    '@nx/enforce-module-boundaries': [
-      'error',
-      { enforceBuildableLibDependency: false }
-    ],
     'vitest/prefer-lowercase-title': 'error',
     'vitest/max-nested-describe': 'error',
     'vitest/no-focused-tests': 'error',
@@ -48,7 +45,7 @@ export const vitestESLint = tseslint.config({
     'vitest/prefer-called-with': 'error',
     'vitest/prefer-to-be-falsy': 'error',
     'vitest/prefer-to-be-object': 'error',
-    'vitest/prefer-to-be-truthy': 'error',
+    'vitest/prefer-to-be-truthy': 'off',
     'vitest/prefer-to-have-length': 'error',
     'vitest/prefer-equality-matcher': 'error',
     'vitest/prefer-strict-equal': 'error',
@@ -84,6 +81,7 @@ export const vitestESLint = tseslint.config({
     'vitest/valid-expect': 'error',
     'vitest/valid-describe-callback': 'error',
     'vitest/require-local-test-context-for-concurrent-snapshots': 'error',
-    'vitest/no-import-node-test': 'error'
+    'vitest/no-import-node-test': 'error',
+    'functional/prefer-immutable-types': 'off'
   }
 });
